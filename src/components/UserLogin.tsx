@@ -10,13 +10,13 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import { baseUrl } from "../baseUrl";
 import { User } from "../interface/User";
 import { z } from "zod";
+import useCustomToast from "./useCustomToast";
 
 interface UserLoginProps {
     setActiveUser: React.Dispatch<React.SetStateAction<User | undefined>>;
@@ -38,22 +38,7 @@ export function UserLogin({
     const [nameInput, setNameInput] = useState<string>("");
     const [isFaculty, setIsFaculty] = useState<boolean>(false);
 
-    //Custom toast function
-    const toast = useToast();
-    const showUserToast = (
-        title: string,
-        description: string,
-        status: "info" | "warning" | "success" | "error" | "loading" | undefined
-    ) => {
-        toast({
-            position: "top",
-            title: title,
-            description: description,
-            status: status,
-            duration: 5000,
-            isClosable: true,
-        });
-    };
+    const showUserToast = useCustomToast();
 
     const handleNameInput = (nameValue: string) => {
         setNameInput(nameValue);
