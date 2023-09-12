@@ -17,8 +17,16 @@
         "check-all": "yarn type-check && yarn lint && yarn format && yarn test"
     },
     "dependencies": {
+        "@chakra-ui/react": "^2.8.1",
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
+        "@types/axios": "^0.14.0",
+        "@types/react-router-dom": "5.3.3",
+        "axios": "^1.5.0",
+        "framer-motion": "^10.16.4",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "react-router-dom": "5.3.3"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.4",
