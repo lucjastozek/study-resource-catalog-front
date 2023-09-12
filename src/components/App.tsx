@@ -7,6 +7,15 @@ import {
     VStack,
     Avatar,
     Flex,
+    Heading,
+    Popover,
+    PopoverTrigger,
+    Portal,
+    PopoverContent,
+    PopoverArrow,
+    PopoverHeader,
+    PopoverCloseButton,
+    PopoverBody,
 } from "@chakra-ui/react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { UserLogin } from "./UserLogin";
@@ -34,63 +43,95 @@ function App() {
 
     return (
         <div className="App">
-            <header>
-                <Flex justify={"space-around"}>
-                    <Button onClick={toggleColorMode}>
-                        Toggle {colorMode === "light" ? "Dark" : "Light"}
-                    </Button>
-                    <Avatar
-                        src="https://bit.ly/broken-link"
-                        name={activeUser?.name}
-                    />
-                </Flex>
-            </header>
-
-            <Container>
-                <Router>
-                    <VStack>
-                        <nav>
-                            <HStack>
-                                <Button>
-                                    <Link to="/home">Home</Link>
-                                </Button>
-
-                                <Button>
-                                    <Link to="/study">
-                                        Your Study Resources
-                                    </Link>
-                                </Button>
-
-                                <Button>
-                                    <Link to="/users">Users</Link>
-                                </Button>
-
-                                <Button>
-                                    <Link to="/submit">Submit New</Link>
-                                </Button>
-                            </HStack>
-                        </nav>
-
-                        <Switch>
-                            <Route path="/home">
-                                <Home />
-                            </Route>
-                            <Route path="/users">
-                                <UserLogin
-                                    listedUsers={listedUsers}
-                                    setActiveUser={setActiveUser}
+            <Flex direction={"column"} height={"100vh"}>
+                <header>
+                    <Flex
+                        justify={"space-around"}
+                        alignItems={"center"}
+                        paddingTop={"2vh"}
+                    >
+                        <Button onClick={toggleColorMode}>
+                            Toggle {colorMode === "light" ? "Dark" : "Light"}
+                        </Button>
+                        <Heading textAlign={"center"}>
+                            Study Resources Catalog
+                        </Heading>
+                        <Popover>
+                            <PopoverTrigger>
+                                <Avatar
+                                    src="https://bit.ly/broken-link"
+                                    name={activeUser?.name}
                                 />
-                            </Route>
-                            <Route path="/study">
-                                <ToStudy />
-                            </Route>
-                            <Route path="/submit">
-                                <SubmitResource />
-                            </Route>
-                        </Switch>
-                    </VStack>
-                </Router>
-            </Container>
+                            </PopoverTrigger>
+                            <Portal>
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverHeader>
+                                        Do you want to sign out?
+                                    </PopoverHeader>
+                                    <PopoverCloseButton />
+                                    <PopoverBody>
+                                        <Button
+                                            colorScheme="blue"
+                                            onClick={() =>
+                                                setActiveUser(undefined)
+                                            }
+                                        >
+                                            <a href="/users">Sign Out</a>
+                                        </Button>
+                                    </PopoverBody>
+                                </PopoverContent>
+                            </Portal>
+                        </Popover>
+                    </Flex>
+                </header>
+
+                <Container>
+                    <Router>
+                        <VStack>
+                            <nav>
+                                <HStack>
+                                    <Button>
+                                        <Link to="/home">Home</Link>
+                                    </Button>
+
+                                    <Button>
+                                        <Link to="/study">
+                                            Your Study Resources
+                                        </Link>
+                                    </Button>
+
+                                    <Button>
+                                        <Link to="/users">Users</Link>
+                                    </Button>
+
+                                    <Button>
+                                        <Link to="/submit">Submit New</Link>
+                                    </Button>
+                                </HStack>
+                            </nav>
+
+                            <Switch>
+                                <Route path="/home">
+                                    <Home />
+                                </Route>
+                                <Route path="/users">
+                                    <UserLogin
+                                        listedUsers={listedUsers}
+                                        setActiveUser={setActiveUser}
+                                    />
+                                </Route>
+                                <Route path="/study">
+                                    <ToStudy />
+                                </Route>
+                                <Route path="/submit">
+                                    <SubmitResource />
+                                </Route>
+                            </Switch>
+                        </VStack>
+                    </Router>
+                </Container>
+            </Flex>
         </div>
     );
 }
