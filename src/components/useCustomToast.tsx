@@ -4,13 +4,21 @@ function useCustomToast() {
     const toast = useToast();
 
     const showToast = (
-        title: string,
-        description: string,
-        status: "info" | "warning" | "success" | "error" | "loading" | undefined
+        status:
+            | "info"
+            | "warning"
+            | "success"
+            | "error"
+            | "loading"
+            | undefined,
+        description: string
     ) => {
         const toastOptions = {
-            position: "top" as ToastPosition, // Default position
-            title: title,
+            position: "top" as ToastPosition,
+            title: `${status
+                ?.charAt(0)
+                .toUpperCase()
+                .concat(status?.slice(1))}!`,
             description: description,
             status: status,
             duration: 5000,

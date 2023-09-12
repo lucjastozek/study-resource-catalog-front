@@ -56,26 +56,14 @@ export function UserLogin({
             setActiveUser(response.data[0]);
             setNameInput("");
             setIsFaculty(false);
-            showUserToast(
-                "Account created!",
-                "The user has been successfully created!",
-                "success"
-            );
+            showUserToast("success", "The user has been successfully created!");
         } catch (error) {
             if (error instanceof z.ZodError) {
                 error.errors.forEach((err) => {
-                    showUserToast(
-                        "Error creating the user!",
-                        err.message,
-                        "error"
-                    );
+                    showUserToast("error", err.message);
                 });
             } else {
-                showUserToast(
-                    "Error creating the user!",
-                    "Username has already been taken!",
-                    "error"
-                );
+                showUserToast("error", "Username has already been taken!");
             }
         }
     };
