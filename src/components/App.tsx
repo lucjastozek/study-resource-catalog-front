@@ -11,9 +11,24 @@ import { UserLogin } from "./UserLogin";
 import { ToStudy } from "./ToStudy";
 import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
+import { useEffect, useState } from "react";
+import { User } from "../interface/User";
+import axios from "axios";
+import { baseUrl } from "../baseUrl";
 
 function App() {
     const { colorMode, toggleColorMode } = useColorMode();
+    const [listedUsers, setListedUsers] = useState<User[]>([]);
+    const [activeUser, setActiveUser] = useState<User>();
+
+    useEffect(() => {
+        async function fetchUsers(): Promise<User[]> {
+            const response = await axios.get(baseUrl + "/users");
+            return response.data;
+        }
+
+        fetchUsers().then((users) => setListedUsers(users));
+    }, []);
 
     return (
         <div className="App">
@@ -22,6 +37,7 @@ function App() {
                     Toggle {colorMode === "light" ? "Dark" : "Light"}
                 </Button>
             </header>
+            <h2>Hi {activeUser && activeUser.name}</h2>
 
             <Container>
                 <Router>
@@ -53,7 +69,10 @@ function App() {
                                 <Home />
                             </Route>
                             <Route path="/users">
-                                <UserLogin />
+                                <UserLogin
+                                    listedUsers={listedUsers}
+                                    setActiveUser={setActiveUser}
+                                />
                             </Route>
                             <Route path="/study">
                                 <ToStudy />
