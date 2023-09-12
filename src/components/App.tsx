@@ -5,6 +5,8 @@ import {
     Container,
     HStack,
     VStack,
+    Avatar,
+    Flex,
 } from "@chakra-ui/react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { UserLogin } from "./UserLogin";
@@ -33,11 +35,16 @@ function App() {
     return (
         <div className="App">
             <header>
-                <Button onClick={toggleColorMode}>
-                    Toggle {colorMode === "light" ? "Dark" : "Light"}
-                </Button>
+                <Flex justify={"space-around"}>
+                    <Button onClick={toggleColorMode}>
+                        Toggle {colorMode === "light" ? "Dark" : "Light"}
+                    </Button>
+                    <Avatar
+                        src="https://bit.ly/broken-link"
+                        name={activeUser?.name}
+                    />
+                </Flex>
             </header>
-            <h2>Hi {activeUser && activeUser.name}</h2>
 
             <Container>
                 <Router>
