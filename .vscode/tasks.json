@@ -1,0 +1,56 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "type-check-and-lint",
+            "dependsOn": ["type-check", "lint"],
+            "dependsOrder": "sequence",
+            "group": {
+                "kind": "build",
+                //make this the default build task (often mapped as ctrl-shift-b)
+                "isDefault": true
+            }
+        },
+        {
+            //this is npm even if you're using yarn
+            "type": "npm",
+            //label is used in menus and in the compound task above
+            "label": "type-check",
+            //which script in package.json to run
+            "script": "type-check",
+            //feed the output of tsc into vscode's "problems" list
+            "problemMatcher": "$tsc",
+            "group": {
+                "kind": "build"
+            },
+            //
+            "presentation": {
+                //reveal problems list if typechecker finds problems
+                "revealProblems": "onProblem",
+                //otherwise, don't open the terminal with tsc's happy output
+                //comment this out if you are debugging this task
+                "reveal": "silent",
+                //close terminal after task runs
+                "close": true
+            }
+        },
+        {
+            "type": "npm",
+            "label": "lint",
+            "script": "lint",
+            "group": {
+                "kind": "build"
+            },
+            "problemMatcher": ["$eslint-stylish"],
+            "presentation": {
+                "revealProblems": "onProblem",
+                "reveal": "silent",
+                "close": true
+            }
+        }
+    ]
+}
+//more about this setup
+//https://www.notion.so/weareacademy/Configure-vscode-to-type-check-your-entire-project-on-a-key-press-c094e6c14f1240969b099c238643cee2
