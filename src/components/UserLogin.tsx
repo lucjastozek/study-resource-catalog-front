@@ -37,7 +37,23 @@ export function UserLogin({
 }: UserLoginProps): JSX.Element {
     const [nameInput, setNameInput] = useState<string>("");
     const [isFaculty, setIsFaculty] = useState<boolean>(false);
+
+    //Custom toast function
     const toast = useToast();
+    const showUserToast = (
+        title: string,
+        description: string,
+        status: "info" | "warning" | "success" | "error" | "loading" | undefined
+    ) => {
+        toast({
+            position: "top",
+            title: title,
+            description: description,
+            status: status,
+            duration: 5000,
+            isClosable: true,
+        });
+    };
 
     const handleNameInput = (nameValue: string) => {
         setNameInput(nameValue);
@@ -55,35 +71,26 @@ export function UserLogin({
             setActiveUser(response.data[0]);
             setNameInput("");
             setIsFaculty(false);
-            toast({
-                position: "top",
-                title: "Account created!",
-                description: "The user has been successfully created!",
-                status: "success",
-                duration: 5000,
-                isClosable: true,
-            });
+            showUserToast(
+                "Account created!",
+                "The user has been successfully created!",
+                "success"
+            );
         } catch (error) {
             if (error instanceof z.ZodError) {
                 error.errors.forEach((err) => {
-                    toast({
-                        position: "top",
-                        title: "Error!",
-                        description: err.message,
-                        status: "error",
-                        duration: 5000,
-                        isClosable: true,
-                    });
+                    showUserToast(
+                        "Error creating the user!",
+                        err.message,
+                        "error"
+                    );
                 });
             } else {
-                toast({
-                    position: "top",
-                    title: "Error!",
-                    description: "Username has been already taken!",
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                });
+                showUserToast(
+                    "Error creating the user!",
+                    "Username has already been taken!",
+                    "error"
+                );
             }
         }
     };
