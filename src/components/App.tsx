@@ -1,31 +1,31 @@
-import "./App.css";
 import {
-    useColorMode,
+    Avatar,
     Button,
     Container,
-    HStack,
-    VStack,
-    Avatar,
     Flex,
+    HStack,
     Heading,
     Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseButton,
+    PopoverContent,
+    PopoverHeader,
     PopoverTrigger,
     Portal,
-    PopoverContent,
-    PopoverArrow,
-    PopoverHeader,
-    PopoverCloseButton,
-    PopoverBody,
+    VStack,
+    useColorMode,
 } from "@chakra-ui/react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { UserLogin } from "./UserLogin";
-import { ToStudy } from "./ToStudy";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { baseUrl } from "../baseUrl";
+import { User } from "../interface/User";
+import "./App.css";
 import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
-import { useEffect, useState } from "react";
-import { User } from "../interface/User";
-import axios from "axios";
-import { baseUrl } from "../baseUrl";
+import { ToStudy } from "./ToStudy";
+import { UserLogin } from "./UserLogin";
 
 function App() {
     const { colorMode, toggleColorMode } = useColorMode();
