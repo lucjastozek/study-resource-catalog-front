@@ -21,6 +21,7 @@ import { formatContentType } from "../utils/formatContentType";
 import { User } from "../interface/User";
 import { z } from "zod";
 import { SubmitForm } from "../interface/submitForm";
+import useCustomToast from "./useCustomToast";
 
 interface SubmitResourceProps {
     activeUser?: User;
@@ -29,7 +30,20 @@ interface SubmitResourceProps {
 export const SubmitResource = ({
     activeUser,
 }: SubmitResourceProps): JSX.Element => {
-    const [formValues, setFormValues] = useState<SubmitForm>({} as SubmitForm);
+    const initialState: SubmitForm = {
+        author_name: "",
+        resource_name: "",
+        description: "",
+        url: "",
+        recommendation_type: null,
+        stage: 1,
+        reason: "",
+        user_id: activeUser?.user_id,
+        content_type: "video",
+    };
+    const [formValues, setFormValues] = useState<SubmitForm>(initialState);
+
+    const showFormToast = useCustomToast();
 
     const formSchema = z.object({
         author_name: z
@@ -63,11 +77,19 @@ export const SubmitResource = ({
 
     const handleSubmit = async () => {
         if (activeUser) {
-            const userid = { user_id: activeUser.user_id };
-            formSchema.parse(formValues);
-            setFormValues((prev) => ({ ...prev, ...userid }));
-            await axios.post(baseUrl + "/resources", formValues);
-            setFormValues({} as SubmitForm);
+            try {
+                const userid = { user_id: activeUser.user_id };
+                setFormValues((prev) => ({ ...prev, ...userid }));
+                formSchema.parse(formValues);
+                await axios.post(baseUrl + "/resources", formValues);
+                setFormValues(initialState);
+            } catch (error) {
+                if (error instanceof z.ZodError) {
+                    error.errors.forEach((err) => {
+                        showFormToast("error", err.message);
+                    });
+                }
+            }
         }
     };
 
@@ -78,17 +100,33 @@ export const SubmitResource = ({
         setFormValues((prev) => ({ ...prev, ...recommendValue }));
     };
 
+    const handleChangeForm = (
+        propertyTarget: string,
+        value: string | number
+    ) => {
+        const updatedProperty = { [propertyTarget]: value };
+        setFormValues((prev) => ({ ...prev, ...updatedProperty }));
+    };
+
     return (
         <>
             <Heading>Submit New Resource</Heading>
 
             <Stack justifyContent={"center"}>
                 <Input
-                    value={formValues?.resource_name}
+                    onChange={(e) =>
+                        handleChangeForm(e.target.formTarget, e.target.value)
+                    }
+                    formTarget="resource_name"
+                    value={formValues.resource_name}
                     placeholder="Resource Name"
                 ></Input>
                 <Input
-                    value={formValues?.author_name}
+                    onChange={(e) =>
+                        handleChangeForm(e.target.formTarget, e.target.value)
+                    }
+                    formTarget="author_name"
+                    value={formValues.author_name}
                     placeholder="Author"
                 ></Input>
 
@@ -96,16 +134,34 @@ export const SubmitResource = ({
                     <InputLeftAddon textAlign={"center"}>
                         https://{" "}
                     </InputLeftAddon>
-                    <Input value={formValues?.url} placeholder="URL"></Input>
+                    <Input
+                        onChange={(e) =>
+                            handleChangeForm(
+                                e.target.formTarget,
+                                e.target.value
+                            )
+                        }
+                        formTarget="url"
+                        value={formValues.url}
+                        placeholder="URL"
+                    ></Input>
                 </InputGroup>
                 <Textarea
-                    value={formValues?.description}
+                    onChange={(e) =>
+                        handleChangeForm("description", e.target.value)
+                    }
+                    value={formValues.description}
                     placeholder="Description"
                 ></Textarea>
 
                 <InputGroup>
                     <InputLeftAddon w={"9rem"}> Content Type</InputLeftAddon>
-                    <Select value={formValues.content_type}>
+                    <Select
+                        onChange={(e) =>
+                            handleChangeForm("content_type", e.target.value)
+                        }
+                        value={formValues.content_type}
+                    >
                         {contentTypes.map((type) => (
                             <option key={type} value={type}>
                                 {formatContentType(type)}
@@ -118,7 +174,10 @@ export const SubmitResource = ({
                     <InputLeftAddon w={"9rem"}>Build Week </InputLeftAddon>
 
                     <NumberInput
-                        value={formValues?.stage}
+                        onChange={(value) =>
+                            handleChangeForm("stage", Number(value))
+                        }
+                        value={formValues.stage}
                         defaultValue={1}
                         min={1}
                         max={15}
@@ -133,27 +192,43 @@ export const SubmitResource = ({
 
                 <Button
                     onClick={() => handleRecommend("recommend")}
-                    colorScheme="green"
+                    colorScheme={"green"}
+                    variant={
+                        formValues.recommendation_type === "recommend"
+                            ? "solid"
+                            : "outline"
+                    }
                 >
                     Recommend
                 </Button>
 
                 <Button
                     onClick={() => handleRecommend("promising")}
-                    colorScheme="blue"
+                    colorScheme={"blue"}
+                    variant={
+                        formValues.recommendation_type === "promising"
+                            ? "solid"
+                            : "outline"
+                    }
                 >
-                    Looks promising
+                    Looks Promising
                 </Button>
 
                 <Button
                     onClick={() => handleRecommend("disrecommend")}
-                    colorScheme="red"
+                    colorScheme={"red"}
+                    variant={
+                        formValues.recommendation_type === "disrecommend"
+                            ? "solid"
+                            : "outline"
+                    }
                 >
-                    Anti-recommend
+                    Don't Recommend
                 </Button>
 
                 <Textarea
-                    value={formValues?.reason}
+                    onChange={(e) => handleChangeForm("reason", e.target.value)}
+                    value={formValues.reason}
                     placeholder="Reason for (anti)recommendation"
                 ></Textarea>
                 <Button onClick={handleSubmit}> Submit</Button>
