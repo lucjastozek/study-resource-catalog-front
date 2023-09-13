@@ -10,13 +10,13 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import { baseUrl } from "../baseUrl";
 import { User } from "../interface/User";
 import { z } from "zod";
+import useCustomToast from "./useCustomToast";
 
 interface UserLoginProps {
     setActiveUser: React.Dispatch<React.SetStateAction<User | undefined>>;
@@ -37,7 +37,8 @@ export function UserLogin({
 }: UserLoginProps): JSX.Element {
     const [nameInput, setNameInput] = useState<string>("");
     const [isFaculty, setIsFaculty] = useState<boolean>(false);
-    const toast = useToast();
+
+    const showUserToast = useCustomToast();
 
     const handleNameInput = (nameValue: string) => {
         setNameInput(nameValue);
@@ -55,35 +56,14 @@ export function UserLogin({
             setActiveUser(response.data[0]);
             setNameInput("");
             setIsFaculty(false);
-            toast({
-                position: "top",
-                title: "Account created!",
-                description: "The user has been successfully created!",
-                status: "success",
-                duration: 5000,
-                isClosable: true,
-            });
+            showUserToast("success", "The user has been successfully created!");
         } catch (error) {
             if (error instanceof z.ZodError) {
                 error.errors.forEach((err) => {
-                    toast({
-                        position: "top",
-                        title: "Error!",
-                        description: err.message,
-                        status: "error",
-                        duration: 5000,
-                        isClosable: true,
-                    });
+                    showUserToast("error", err.message);
                 });
             } else {
-                toast({
-                    position: "top",
-                    title: "Error!",
-                    description: "Username has been already taken!",
-                    status: "error",
-                    duration: 5000,
-                    isClosable: true,
-                });
+                showUserToast("error", "Username has already been taken!");
             }
         }
     };
