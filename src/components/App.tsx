@@ -1,4 +1,6 @@
 import {
+    Alert,
+    AlertIcon,
     Avatar,
     Button,
     Container,
@@ -86,51 +88,66 @@ function App() {
                     </Flex>
                 </header>
 
-                <Container>
-                    <Router>
-                        <VStack>
-                            <nav>
-                                <HStack>
-                                    <Button>
-                                        <Link to="/home">Home</Link>
-                                    </Button>
+                <Router>
+                    <VStack>
+                        <nav>
+                            <HStack>
+                                <Button>
+                                    <Link to="/home">Home</Link>
+                                </Button>
 
-                                    <Button>
-                                        <Link to="/study">
-                                            Your Study Resources
-                                        </Link>
-                                    </Button>
+                                <Button>
+                                    <Link to="/study">
+                                        Your Study Resources
+                                    </Link>
+                                </Button>
 
-                                    <Button>
-                                        <Link to="/users">Users</Link>
-                                    </Button>
+                                <Button>
+                                    <Link to="/users">Users</Link>
+                                </Button>
 
-                                    <Button>
-                                        <Link to="/submit">Submit New</Link>
-                                    </Button>
-                                </HStack>
-                            </nav>
+                                <Button>
+                                    <Link to="/submit">Submit New</Link>
+                                </Button>
+                            </HStack>
+                        </nav>
 
-                            <Switch>
-                                <Route path="/home">
-                                    <Home />
-                                </Route>
-                                <Route path="/users">
-                                    <UserLogin
-                                        listedUsers={listedUsers}
-                                        setActiveUser={setActiveUser}
-                                    />
-                                </Route>
-                                <Route path="/study">
-                                    <ToStudy />
-                                </Route>
-                                <Route path="/submit">
-                                    <SubmitResource />
-                                </Route>
-                            </Switch>
-                        </VStack>
-                    </Router>
-                </Container>
+                        <Switch>
+                            <Route path="/home">
+                                <Home />
+                            </Route>
+                            <Route path="/users">
+                                <UserLogin
+                                    listedUsers={listedUsers}
+                                    setActiveUser={setActiveUser}
+                                />
+                            </Route>
+                            <Route path="/study">
+                                <ToStudy />
+                            </Route>
+                            <Route path="/submit">
+                                {activeUser ? (
+                                    <SubmitResource activeUser={activeUser} />
+                                ) : (
+                                    <>
+                                        {" "}
+                                        <Container>
+                                            <Alert status="warning">
+                                                <AlertIcon />
+                                                You must login before you can
+                                                submit a new resource!
+                                            </Alert>{" "}
+                                        </Container>
+                                        <UserLogin
+                                            listedUsers={listedUsers}
+                                            setActiveUser={setActiveUser}
+                                        />{" "}
+                                    </>
+                                )}
+                            </Route>
+                        </Switch>
+                    </VStack>
+                </Router>
             </Flex>
         </div>
     );
