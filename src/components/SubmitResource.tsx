@@ -49,11 +49,11 @@ export const SubmitResource = ({
             .url("Submitted url is invalid")
             .min(1, "You need to input a url")
             .max(250, "Your description exceeds maximum characters of 250"),
-        buildWeek: z
+        stage: z
             .number()
             .min(1, "You must input a build week number")
             .max(15, "Your build week number exceeds the maximum week"),
-        recommend: z.enum(["recommend", "promising", "disrecommend"]),
+        recommendation_type: z.enum(["recommend", "promising", "disrecommend"]),
         reason: z
             .string()
             .min(1, "You need to input a reason for recommending")
@@ -74,7 +74,7 @@ export const SubmitResource = ({
     const handleRecommend = (
         recommendation: "recommend" | "promising" | "disrecommend"
     ) => {
-        const recommendValue = { recommend: recommendation };
+        const recommendValue = { recommendation_type: recommendation };
         setFormValues((prev) => ({ ...prev, ...recommendValue }));
     };
 
@@ -105,7 +105,7 @@ export const SubmitResource = ({
 
                 <InputGroup>
                     <InputLeftAddon w={"9rem"}> Content Type</InputLeftAddon>
-                    <Select>
+                    <Select value={formValues.content_type}>
                         {contentTypes.map((type) => (
                             <option key={type} value={type}>
                                 {formatContentType(type)}
@@ -118,7 +118,7 @@ export const SubmitResource = ({
                     <InputLeftAddon w={"9rem"}>Build Week </InputLeftAddon>
 
                     <NumberInput
-                        value={formValues?.buildWeek}
+                        value={formValues?.stage}
                         defaultValue={1}
                         min={1}
                         max={15}
