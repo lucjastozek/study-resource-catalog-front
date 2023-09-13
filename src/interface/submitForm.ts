@@ -3,10 +3,10 @@ export interface SubmitForm {
     resource_name: string;
     description: string;
     url: string;
-    recommendation_type: "recommend" | "promising" | "disrecommend";
+    recommendation_type: "recommend" | "promising" | "disrecommend" | null;
     stage: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
     reason: string;
-    user_id: number;
+    user_id: number | undefined;
     content_type:
         | "video"
         | "article"
