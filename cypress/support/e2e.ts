@@ -42,7 +42,6 @@ describe("User can sign up", () => {
 
         cy.contains("Sign up").click();
 
-        cy.wait(5000);
         cy.contains("Submit New").click();
         cy.contains("Submit New Resource");
     });

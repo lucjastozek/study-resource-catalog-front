@@ -28,11 +28,13 @@ import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
+import { Resource } from "../interface/Resource";
 
 function App() {
     const { colorMode, toggleColorMode } = useColorMode();
     const [listedUsers, setListedUsers] = useState<User[]>([]);
     const [activeUser, setActiveUser] = useState<User>();
+    const [resources, setResources] = useState<Resource[]>([]);
 
     useEffect(() => {
         async function fetchUsers(): Promise<User[]> {
@@ -40,7 +42,13 @@ function App() {
             return response.data;
         }
 
+        async function fetchResources(): Promise<Resource[]> {
+            const response = await axios.get(baseUrl + "/resources");
+            return response.data;
+        }
+
         fetchUsers().then((users) => setListedUsers(users));
+        fetchResources().then((res) => setResources(res));
     }, []);
 
     return (
@@ -114,7 +122,7 @@ function App() {
 
                         <Switch>
                             <Route path="/home">
-                                <Home />
+                                <Home resources={resources} />
                             </Route>
                             <Route path="/users">
                                 <UserLogin
