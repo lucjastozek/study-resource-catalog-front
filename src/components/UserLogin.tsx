@@ -85,6 +85,7 @@ export function UserLogin({
                                     listedUsers[Number(e.target.value)]
                                 )
                             }
+                            id="user-selector"
                         >
                             {listedUsers.map((user, index) => (
                                 <option key={user.user_id} value={index}>
@@ -102,6 +103,7 @@ export function UserLogin({
                                 onChange={(e) =>
                                     handleNameInput(e.target.value)
                                 }
+                                id="sign-up-input"
                             />
                             <Checkbox
                                 size={"lg"}
