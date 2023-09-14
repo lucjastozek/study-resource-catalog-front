@@ -1,58 +1,69 @@
 import {
     Avatar,
     Box,
-    Flex,
-    Heading,
-    Text,
     Card,
-    CardHeader,
     CardBody,
     CardFooter,
+    CardHeader,
+    Flex,
+    Heading,
+    Skeleton,
     Table,
     Tbody,
-    Tr,
     Td,
-    Thead,
+    Text,
     Th,
+    Thead,
+    Tr,
 } from "@chakra-ui/react";
-import { Resource } from "../interface/Resource";
 import axios from "axios";
-import { baseUrl } from "../baseUrl";
 import { useEffect, useState } from "react";
+import { baseUrl } from "../baseUrl";
+import { Resource } from "../interface/Resource";
+
 interface Top5Props {
     resources: Resource[];
 }
 
 export const TopFiveResources = ({ resources }: Top5Props): JSX.Element => {
+    const [usernames, setUsernames] = useState<{ [key: number]: string }>({});
+    const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
+        {}
+    );
+
     async function fetchUserName(id: number) {
         const response = await axios.get(baseUrl + `/users/${id}`);
 
         return response.data[0].name;
     }
 
-    const [usernames, setUsernames] = useState<{ [key: number]: string }>({});
-    const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
-        {}
-    );
-
     async function fetchImage(url: string) {
-        const response = await axios.get(
-            `https://api.linkpreview.net/?key=1c6f4ce9a60e382f3f06cb9a6460653e&q=${url}`
+        const response = await axios.post(
+            "https://get-link-thumbnail.onrender.com/image",
+            { link: url }
         );
 
-        return response.data.image;
+        return (
+            response.data ??
+            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.supermemo.com%2Fen%2Fblog%2Ftwenty-rules-of-formulating-knowledge&psig=AOvVaw3L2h21d9H1-WV3SoHw1Vgp&ust=1694811094875000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCNj45b39qoEDFQAAAAAdAAAAABAD"
+        );
     }
+
     useEffect(() => {
         for (const r of resources) {
             fetchUserName(r.user_id).then((name) => {
                 setUsernames((prev) => ({ ...prev, ...{ [r.user_id]: name } }));
             });
+        }
 
+        for (const r of resources.slice(0, 5)) {
             fetchImage(r.url).then((img) => {
-                setLinkPreviews((prev) => ({
-                    ...prev,
-                    ...{ [r.resource_id]: img },
-                }));
+                if (img !== "no image found") {
+                    setLinkPreviews((prev) => ({
+                        ...prev,
+                        ...{ [r.resource_id]: img },
+                    }));
+                }
             });
         }
     }, [resources]);
@@ -96,14 +107,17 @@ export const TopFiveResources = ({ resources }: Top5Props): JSX.Element => {
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                <img
-                                    src={linkPreviews[resource.resource_id]}
-                                    alt=""
-                                />
+                                {resource.resource_id in linkPreviews ? (
+                                    <img
+                                        src={linkPreviews[resource.resource_id]}
+                                        alt=""
+                                    />
+                                ) : (
+                                    <Skeleton height={"7rem"}></Skeleton>
+                                )}{" "}
                             </a>
-                            <Text fontWeight={"800"} textAlign={"center"}>
-                                {resource.name}
-                            </Text>
+
+                            <Text>{resource.name}</Text>
                         </CardHeader>
                         <CardBody>
                             <Text>{resource.description}</Text>
