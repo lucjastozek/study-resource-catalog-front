@@ -1,10 +1,15 @@
 import { Heading } from "@chakra-ui/react";
 import { TopFiveResources } from "./TopFiveResources";
+import { Resource } from "../interface/Resource";
 
-export const Home = (): JSX.Element => (
+interface HomeProps {
+    resources: Resource[];
+}
+
+export const Home = ({ resources }: HomeProps): JSX.Element => (
     <>
         <Heading>This is the Homepage</Heading>
 
-        <TopFiveResources />
+        <TopFiveResources resources={resources} />
     </>
 );
