@@ -90,7 +90,7 @@ function App() {
 
     return (
         <div className="App">
-            <Flex direction={"column"} height={"100vh"}>
+            <Flex direction={"column"}>
                 <header>
                     <Flex
                         justify={"space-around"}
