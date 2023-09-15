@@ -8,12 +8,14 @@ import {
     CardHeader,
     CardBody,
     CardFooter,
+    Image,
     Table,
     Tbody,
     Tr,
     Td,
     Thead,
     Th,
+    Skeleton,
 } from "@chakra-ui/react";
 import { Resource } from "../interface/Resource";
 import { useEffect, useState } from "react";
@@ -58,6 +60,7 @@ export const Home = ({ resources }: HomeProps): JSX.Element => {
                         margin={"1vw"}
                         key={resource.resource_id}
                         width={"30vw"}
+                        height={"60vh"}
                     >
                         <CardHeader>
                             <Flex
@@ -83,17 +86,29 @@ export const Home = ({ resources }: HomeProps): JSX.Element => {
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                <img
-                                    src={linkPreviews[resource.resource_id]}
-                                    alt=""
-                                />
+                                {resource.resource_id in linkPreviews ? (
+                                    <Image
+                                        src={linkPreviews[resource.resource_id]}
+                                        alt=""
+                                        height={"13.5vh"}
+                                        width={"24vh"}
+                                        objectFit={"cover"}
+                                        margin={"auto"}
+                                    />
+                                ) : (
+                                    <Skeleton
+                                        height={"13.5vh"}
+                                        width={"24vh"}
+                                        margin={"auto"}
+                                    />
+                                )}
                             </a>
                             <Text fontWeight={"800"} textAlign={"center"}>
                                 {resource.name}
                             </Text>
                         </CardHeader>
                         <CardBody>
-                            <Text>{resource.description}</Text>
+                            <Text noOfLines={5}>{resource.description}</Text>
                         </CardBody>
                         <CardFooter></CardFooter>
                     </Card>
