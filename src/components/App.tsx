@@ -139,23 +139,22 @@ function App() {
                     <VStack>
                         <nav>
                             <HStack>
-                                <Button>
-                                    <Link to="/home">Home</Link>
-                                </Button>
+                                <Link to="/home">
+                                    <Button>Home</Button>
+                                </Link>
 
-                                <Button>
-                                    <Link to="/study">
-                                        Your Study Resources
-                                    </Link>
-                                </Button>
+                                <Link to="/study">
+                                    <Button>Your Study Resources</Button>
+                                </Link>
 
-                                <Button>
-                                    <Link to="/users">Users</Link>
-                                </Button>
+                                <Link to="/users">
+                                    <Button>Users</Button>
+                                </Link>
 
-                                <Button>
-                                    <Link to="/submit">Submit New</Link>
-                                </Button>
+                                <Link to="/submit">
+                                    {" "}
+                                    <Button>Submit New</Button>
+                                </Link>
                             </HStack>
                         </nav>
 
