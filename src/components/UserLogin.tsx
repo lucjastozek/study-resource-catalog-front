@@ -20,7 +20,7 @@ import useCustomToast from "./useCustomToast";
 import { userSchema } from "../schemas/userSchema";
 
 interface UserLoginProps {
-    setActiveUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+    setActiveUser: React.Dispatch<React.SetStateAction<User>>;
     listedUsers: User[];
 }
 

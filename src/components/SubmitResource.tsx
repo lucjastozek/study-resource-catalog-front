@@ -23,13 +23,17 @@ import { z } from "zod";
 import { SubmitForm } from "../interface/submitForm";
 import useCustomToast from "./useCustomToast";
 import { formSchema } from "../schemas/formSchema";
+import { Resource } from "../interface/Resource";
+import { fetchResources } from "../utils/fetchResources";
 
 interface SubmitResourceProps {
     activeUser?: User;
+    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
 
 export const SubmitResource = ({
     activeUser,
+    setResources,
 }: SubmitResourceProps): JSX.Element => {
     const initialState: SubmitForm = {
         author_name: "",
@@ -54,6 +58,7 @@ export const SubmitResource = ({
                 formSchema.parse(formValues);
                 await axios.post(baseUrl + "/resources", formValues);
                 setFormValues(initialState);
+                fetchResources().then((res) => setResources(res));
             } catch (error) {
                 if (error instanceof z.ZodError) {
                     error.errors.forEach((err) => {
