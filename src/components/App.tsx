@@ -20,15 +20,15 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Resource } from "../interface/Resource";
 import { User } from "../interface/User";
+import { fetchResources } from "../utils/fetchResources";
+import { fetchUsers } from "../utils/fetchUsers";
 import "./App.css";
 import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
-import { Resource } from "../interface/Resource";
-import { fetchUsers } from "../utils/fetchUsers";
-import { fetchResources } from "../utils/fetchResources";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -41,7 +41,7 @@ function App() {
 
     const { colorMode, toggleColorMode } = useColorMode();
     const [listedUsers, setListedUsers] = useState<User[]>([]);
-    const [activeUser, setActiveUser] = useState<User | undefined>(
+    const [activeUser, setActiveUser] = useState<User>(
         JSON.parse(localUser ?? initialUser)
     );
     const [resources, setResources] = useState<Resource[]>([]);
@@ -91,7 +91,9 @@ function App() {
                                         <Button
                                             colorScheme="blue"
                                             onClick={() =>
-                                                setActiveUser(undefined)
+                                                setActiveUser(
+                                                    JSON.parse(initialUser)
+                                                )
                                             }
                                         >
                                             <a href="/users">Sign Out</a>
@@ -129,7 +131,10 @@ function App() {
 
                         <Switch>
                             <Route path="/home">
-                                <Home resources={resources} />
+                                <Home
+                                    resources={resources}
+                                    setResources={setResources}
+                                />
                             </Route>
                             <Route path="/users">
                                 <UserLogin
@@ -141,8 +146,11 @@ function App() {
                                 <ToStudy />
                             </Route>
                             <Route path="/submit">
-                                {activeUser ? (
-                                    <SubmitResource activeUser={activeUser} />
+                                {activeUser.user_id > 0 ? (
+                                    <SubmitResource
+                                        activeUser={activeUser}
+                                        setResources={setResources}
+                                    />
                                 ) : (
                                     <>
                                         {" "}
