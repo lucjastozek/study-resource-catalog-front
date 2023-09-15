@@ -18,6 +18,7 @@ import moment from "moment";
 import { Resource } from "../interface/Resource";
 import { tagScheme } from "../utils/tagScheme";
 import { handleDislike, handleLike } from "../utils/likeHandlers";
+import { User } from "../interface/User";
 
 interface ResourceCardProps {
     resource: Resource;
@@ -29,6 +30,8 @@ interface ResourceCardProps {
     };
     linkPreviews: { [key: number]: string };
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
+    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    activeUser: User;
 }
 
 export function ResourceCard({
@@ -37,18 +40,16 @@ export function ResourceCard({
     usernames,
     linkPreviews,
     setResources,
+    setFavourites,
+    activeUser,
 }: ResourceCardProps): JSX.Element {
     return (
-        <Card
-            margin={"1vw"}
-            key={resource.resource_id}
-            width={"30vw"}
-            height={"60vh"}
-            onClick={() => {
-                setSelectedResource(resource);
-            }}
-        >
-            <CardHeader>
+        <Card key={resource.resource_id}>
+            <CardHeader
+                onClick={() => {
+                    setSelectedResource(resource);
+                }}
+            >
                 <Flex
                     flex="1"
                     gap="4"
@@ -79,15 +80,15 @@ export function ResourceCard({
                         <Image
                             src={linkPreviews[resource.resource_id]}
                             alt=""
-                            height={"13.5vh"}
-                            width={"24vh"}
+                            width={"90%"}
+                            aspectRatio={16 / 9}
                             objectFit={"cover"}
                             margin={"auto"}
                         />
                     ) : (
                         <Skeleton
-                            height={"13.5vh"}
-                            width={"24vh"}
+                            width={"90%"}
+                            aspectRatio={16 / 9}
                             margin={"auto"}
                         />
                     )}
@@ -96,10 +97,12 @@ export function ResourceCard({
                     {resource.name}
                 </Text>
             </CardHeader>
-            <CardBody>
-                <Text height={"14vh"} noOfLines={5}>
-                    {resource.description}
-                </Text>
+            <CardBody
+                onClick={() => {
+                    setSelectedResource(resource);
+                }}
+            >
+                <Text noOfLines={5}>{resource.description}</Text>
             </CardBody>
             <CardFooter alignItems={"end"} justify={"center"}>
                 <VStack>
@@ -107,7 +110,12 @@ export function ResourceCard({
                         <Tag
                             cursor={"pointer"}
                             onClick={() =>
-                                handleLike(resource.resource_id, setResources)
+                                handleLike(
+                                    resource.resource_id,
+                                    setResources,
+                                    setFavourites,
+                                    activeUser.user_id
+                                )
                             }
                             fontWeight={"bold"}
                             colorScheme="green"
@@ -121,7 +129,9 @@ export function ResourceCard({
                             onClick={() =>
                                 handleDislike(
                                     resource.resource_id,
-                                    setResources
+                                    setResources,
+                                    setFavourites,
+                                    activeUser.user_id
                                 )
                             }
                             fontWeight={"bold"}

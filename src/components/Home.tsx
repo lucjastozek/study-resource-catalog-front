@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
-    Flex,
+    Grid,
     IconButton,
     Table,
     Tbody,
@@ -74,12 +74,11 @@ export const Home = ({
             ) : (
                 <></>
             )}
-            <Flex
-                flexWrap={"nowrap"}
-                justifyContent={"flex-start"}
-                alignItems={"center"}
-                overflowX={"auto"}
-                width={"90vw"}
+            <Grid
+                templateColumns={{ base: "1fr", md: "repeat(5, 1fr)" }}
+                templateRows={{ base: "repeat(5, 1fr)", md: "1fr" }}
+                gap={4}
+                margin={4}
             >
                 {resourcesSortedByLikes
                     .slice(0, 5)
@@ -91,9 +90,11 @@ export const Home = ({
                             usernames={usernames}
                             linkPreviews={linkPreviews}
                             setResources={setResources}
+                            setFavourites={setFavourites}
+                            activeUser={activeUser}
                         />
                     ))}
-            </Flex>
+            </Grid>
             <Table width={"90vw"} variant={"striped"}>
                 <Thead>
                     <Tr>

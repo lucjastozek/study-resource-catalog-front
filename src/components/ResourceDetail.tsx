@@ -148,7 +148,14 @@ export function ResourceDetail({
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    <Button
+                        colorScheme="blue"
+                        mr={3}
+                        onClick={() => {
+                            onClose();
+                            setSelectedResource(undefined);
+                        }}
+                    >
                         Close
                     </Button>
                     <Button
