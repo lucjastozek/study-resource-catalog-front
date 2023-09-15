@@ -21,6 +21,7 @@ import {
     Tooltip,
     Tr,
     VStack,
+    useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
@@ -31,6 +32,7 @@ import { fetchImage } from "../utils/fetchImage";
 import { fetchResources } from "../utils/fetchResources";
 import { fetchUserName } from "../utils/fetchUserName";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ResourceDetail } from "./ResourceDetail";
 
 interface HomeProps {
     resources: Resource[];
@@ -42,6 +44,8 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
     const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
         {}
     );
+    const [selectedResource, setSelectedResource] = useState<Resource>();
+    const { onClose } = useDisclosure();
 
     useEffect(() => {
         for (const r of resources) {
@@ -86,6 +90,23 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
 
     return (
         <>
+            {selectedResource !== undefined ? (
+                <ResourceDetail
+                    isOpen={true}
+                    onClose={onClose}
+                    resource={selectedResource}
+                    tagColor={
+                        tagScheme[
+                            selectedResource.recommendation_type as keyof typeof tagScheme
+                        ]
+                    }
+                    imageLink={linkPreviews[selectedResource.resource_id]}
+                    username={usernames[selectedResource.user_id]}
+                    setSelectedResource={setSelectedResource}
+                />
+            ) : (
+                <></>
+            )}
             <Flex
                 flexWrap={"nowrap"}
                 justifyContent={"flex-start"}
@@ -101,6 +122,9 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
                             key={resource.resource_id}
                             width={"30vw"}
                             height={"60vh"}
+                            onClick={() => {
+                                setSelectedResource(resource);
+                            }}
                         >
                             <CardHeader>
                                 <Flex
@@ -220,7 +244,12 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
                 </Thead>
                 <Tbody>
                     {resourcesSortedByDate.map((resource) => (
-                        <Tr key={resource.resource_id}>
+                        <Tr
+                            key={resource.resource_id}
+                            onClick={() => {
+                                setSelectedResource(resource);
+                            }}
+                        >
                             <Td>{resource.name}</Td>
                             <Td>{resource.author}</Td>
                             <Td textTransform={"capitalize"}>
