@@ -17,19 +17,12 @@ import { baseUrl } from "../baseUrl";
 import { User } from "../interface/User";
 import { z } from "zod";
 import useCustomToast from "./useCustomToast";
+import { userSchema } from "../schemas/userSchema";
 
 interface UserLoginProps {
     setActiveUser: React.Dispatch<React.SetStateAction<User | undefined>>;
     listedUsers: User[];
 }
-
-const userSchema = z.object({
-    user_name: z
-        .string()
-        .min(1, "username has to be at least 1 character long")
-        .max(50, "username has to be maximum 50 characters long"),
-    is_faculty: z.boolean(),
-});
 
 export function UserLogin({
     setActiveUser,

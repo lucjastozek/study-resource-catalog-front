@@ -18,10 +18,8 @@ import {
     VStack,
     useColorMode,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import { baseUrl } from "../baseUrl";
 import { User } from "../interface/User";
 import "./App.css";
 import { Home } from "./Home";
@@ -29,27 +27,36 @@ import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
 import { Resource } from "../interface/Resource";
+import { fetchUsers } from "../utils/fetchUsers";
+import { fetchResources } from "../utils/fetchResources";
 
 function App() {
+    const initialUser = JSON.stringify({
+        user_name: "",
+        user_id: 0,
+        is_faculty: false,
+    });
+
+    const localUser = localStorage.getItem("activeUser");
+
     const { colorMode, toggleColorMode } = useColorMode();
     const [listedUsers, setListedUsers] = useState<User[]>([]);
-    const [activeUser, setActiveUser] = useState<User>();
+    const [activeUser, setActiveUser] = useState<User | undefined>(
+        JSON.parse(localUser ?? initialUser)
+    );
     const [resources, setResources] = useState<Resource[]>([]);
 
     useEffect(() => {
-        async function fetchUsers(): Promise<User[]> {
-            const response = await axios.get(baseUrl + "/users");
-            return response.data;
-        }
-
-        async function fetchResources(): Promise<Resource[]> {
-            const response = await axios.get(baseUrl + "/resources");
-            return response.data;
-        }
-
         fetchUsers().then((users) => setListedUsers(users));
         fetchResources().then((res) => setResources(res));
     }, []);
+
+    useEffect(() => {
+        if (!localUser) {
+            localStorage.setItem("activeUser", initialUser);
+        }
+        localStorage.setItem("activeUser", JSON.stringify(activeUser));
+    }, [localUser, initialUser, activeUser]);
 
     return (
         <div className="App">
