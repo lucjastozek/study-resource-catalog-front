@@ -29,6 +29,9 @@ import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
+import { fetchFavourites } from "../utils/fetchFavourites";
+import { fetchUserName } from "../utils/fetchUserName";
+import { fetchImage } from "../utils/fetchImage";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -45,6 +48,12 @@ function App() {
         JSON.parse(localUser ?? initialUser)
     );
     const [resources, setResources] = useState<Resource[]>([]);
+    const [favourites, setFavourites] = useState<Resource[]>([]);
+    const [selectedResource, setSelectedResource] = useState<Resource>();
+    const [usernames, setUsernames] = useState<{ [key: number]: string }>({});
+    const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
+        {}
+    );
 
     useEffect(() => {
         fetchUsers().then((users) => setListedUsers(users));
@@ -52,10 +61,31 @@ function App() {
     }, []);
 
     useEffect(() => {
+        for (const r of resources) {
+            fetchUserName(r.user_id).then((name) => {
+                setUsernames((prev) => ({ ...prev, ...{ [r.user_id]: name } }));
+            });
+
+            fetchImage(r.url).then((img) => {
+                setLinkPreviews((prev) => ({
+                    ...prev,
+                    ...{ [r.resource_id]: img },
+                }));
+            });
+        }
+    }, [resources]);
+
+    useEffect(() => {
         if (!localUser) {
             localStorage.setItem("activeUser", initialUser);
         }
         localStorage.setItem("activeUser", JSON.stringify(activeUser));
+
+        if (activeUser.user_id > 0) {
+            fetchFavourites(activeUser.user_id).then((fav) =>
+                setFavourites(fav)
+            );
+        }
     }, [localUser, initialUser, activeUser]);
 
     return (
@@ -134,6 +164,10 @@ function App() {
                                 <Home
                                     resources={resources}
                                     setResources={setResources}
+                                    selectedResource={selectedResource}
+                                    setSelectedResource={setSelectedResource}
+                                    usernames={usernames}
+                                    linkPreviews={linkPreviews}
                                 />
                             </Route>
                             <Route path="/users">
@@ -143,7 +177,13 @@ function App() {
                                 />
                             </Route>
                             <Route path="/study">
-                                <ToStudy />
+                                <ToStudy
+                                    favourites={favourites}
+                                    setSelectedResource={setSelectedResource}
+                                    usernames={usernames}
+                                    linkPreviews={linkPreviews}
+                                    setResources={setResources}
+                                />
                             </Route>
                             <Route path="/submit">
                                 {activeUser.user_id > 0 ? (
