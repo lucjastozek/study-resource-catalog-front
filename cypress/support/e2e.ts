@@ -20,7 +20,7 @@ import "./commands";
 // require('./commands')
 
 describe("Test home button redirecting to /home", () => {
-    it("Does not do much!", () => {
+    it("check if redirected link contans /home", () => {
         cy.visit("http://localhost:3000/users");
 
         cy.contains("Home").click();
@@ -35,7 +35,7 @@ describe("User can sign up", () => {
 
         cy.contains("Sign Up").click();
 
-        const name = `Neill! ${Math.random()}`;
+        const name = `Test user #${Math.floor(Math.random() * 10000)}`;
 
         cy.get('[id="sign-up-input"]').type(name);
         cy.get('[id="sign-up-input"]').should("have.value", name);
@@ -48,7 +48,7 @@ describe("User can sign up", () => {
 });
 
 describe("User can choose a name from the selector", () => {
-    it("Does not do much!", () => {
+    it("", () => {
         cy.visit("http://localhost:3000/users");
 
         cy.get('[id="user-selector"]').select(1);
