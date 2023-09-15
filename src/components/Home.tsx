@@ -9,13 +9,13 @@ import {
     Thead,
     Tooltip,
     Tr,
-    useDisclosure,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { Resource } from "../interface/Resource";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
 import { tagScheme } from "../utils/tagScheme";
+import { User } from "../interface/User";
 
 interface HomeProps {
     resources: Resource[];
@@ -30,6 +30,8 @@ interface HomeProps {
     linkPreviews: {
         [key: number]: string;
     };
+    activeUser: User;
+    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
 
 export const Home = ({
@@ -39,9 +41,9 @@ export const Home = ({
     setSelectedResource,
     usernames,
     linkPreviews,
+    activeUser,
+    setFavourites,
 }: HomeProps): JSX.Element => {
-    const { onClose } = useDisclosure();
-
     const copyLikesResources = [...resources];
     const resourcesSortedByLikes = copyLikesResources.sort(
         (a, b) => b.likes - a.likes
@@ -57,7 +59,6 @@ export const Home = ({
             {selectedResource !== undefined ? (
                 <ResourceDetail
                     isOpen={true}
-                    onClose={onClose}
                     resource={selectedResource}
                     tagColor={
                         tagScheme[
@@ -67,6 +68,8 @@ export const Home = ({
                     imageLink={linkPreviews[selectedResource.resource_id]}
                     username={usernames[selectedResource.user_id]}
                     setSelectedResource={setSelectedResource}
+                    activeUser={activeUser}
+                    setFavourites={setFavourites}
                 />
             ) : (
                 <></>
