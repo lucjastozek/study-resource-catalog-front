@@ -168,6 +168,8 @@ function App() {
                                     setSelectedResource={setSelectedResource}
                                     usernames={usernames}
                                     linkPreviews={linkPreviews}
+                                    activeUser={activeUser}
+                                    setFavourites={setFavourites}
                                 />
                             </Route>
                             <Route path="/users">
@@ -183,6 +185,9 @@ function App() {
                                     usernames={usernames}
                                     linkPreviews={linkPreviews}
                                     setResources={setResources}
+                                    selectedResource={selectedResource}
+                                    activeUser={activeUser}
+                                    setFavourites={setFavourites}
                                 />
                             </Route>
                             <Route path="/submit">

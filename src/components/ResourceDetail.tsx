@@ -15,14 +15,19 @@ import {
     Skeleton,
     Tag,
     Text,
+    useDisclosure,
 } from "@chakra-ui/react";
 import { Resource } from "../interface/Resource";
 import { formatContentType } from "../utils/formatContentType";
 import moment from "moment";
+import { baseUrl } from "../baseUrl";
+import axios from "axios";
+import { User } from "../interface/User";
+import useCustomToast from "./useCustomToast";
+import { fetchFavourites } from "../utils/fetchFavourites";
 
 interface ResourceDetailProps {
     isOpen: boolean;
-    onClose: () => void;
     resource: Resource;
     tagColor: string;
     imageLink: string | null;
@@ -30,17 +35,34 @@ interface ResourceDetailProps {
     setSelectedResource: React.Dispatch<
         React.SetStateAction<Resource | undefined>
     >;
+    activeUser: User;
+    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
 
 export function ResourceDetail({
     isOpen,
-    onClose,
     resource,
     tagColor,
     imageLink,
     username,
     setSelectedResource,
+    activeUser,
+    setFavourites,
 }: ResourceDetailProps): JSX.Element {
+    const { onClose } = useDisclosure();
+    const toast = useCustomToast();
+
+    async function handleAddFavourite(resource_id: number, user_id: number) {
+        await axios.post(baseUrl + "/favourites", {
+            resource_id: resource_id,
+            user_id: user_id,
+        });
+
+        toast("success", "Added to favourites!");
+
+        fetchFavourites(activeUser.user_id).then((fav) => setFavourites(fav));
+    }
+
     return (
         <Modal
             isOpen={isOpen}
@@ -129,7 +151,17 @@ export function ResourceDetail({
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Close
                     </Button>
-                    <Button variant="ghost">Add To Favourites!</Button>
+                    <Button
+                        variant="ghost"
+                        onClick={() => {
+                            handleAddFavourite(
+                                resource.resource_id,
+                                activeUser.user_id
+                            );
+                        }}
+                    >
+                        Add To Favourites!
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
