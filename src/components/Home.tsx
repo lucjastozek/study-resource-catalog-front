@@ -1,78 +1,46 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
-    Avatar,
-    Box,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader,
     Flex,
-    HStack,
-    Heading,
     IconButton,
-    Image,
-    Skeleton,
     Table,
-    Tag,
     Tbody,
     Td,
-    Text,
     Th,
     Thead,
     Tooltip,
     Tr,
-    VStack,
+    useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
-import { baseUrl } from "../baseUrl";
 import { Resource } from "../interface/Resource";
-import { fetchImage } from "../utils/fetchImage";
-import { fetchResources } from "../utils/fetchResources";
-import { fetchUserName } from "../utils/fetchUserName";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ResourceCard } from "./ResourceCard";
+import { ResourceDetail } from "./ResourceDetail";
+import { tagScheme } from "../utils/tagScheme";
 
 interface HomeProps {
     resources: Resource[];
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
+    selectedResource: Resource | undefined;
+    setSelectedResource: React.Dispatch<
+        React.SetStateAction<Resource | undefined>
+    >;
+    usernames: {
+        [key: number]: string;
+    };
+    linkPreviews: {
+        [key: number]: string;
+    };
 }
 
-export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
-    const [usernames, setUsernames] = useState<{ [key: number]: string }>({});
-    const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
-        {}
-    );
-
-    useEffect(() => {
-        for (const r of resources) {
-            fetchUserName(r.user_id).then((name) => {
-                setUsernames((prev) => ({ ...prev, ...{ [r.user_id]: name } }));
-            });
-
-            fetchImage(r.url).then((img) => {
-                setLinkPreviews((prev) => ({
-                    ...prev,
-                    ...{ [r.resource_id]: img },
-                }));
-            });
-        }
-    }, [resources]);
-
-    const handleLike = async (id: number) => {
-        await axios.put(`${baseUrl}/resources/${id}`, { action: "like" });
-        fetchResources().then((res) => setResources(res));
-    };
-
-    const handleDislike = async (id: number) => {
-        await axios.put(`${baseUrl}/resources/${id}`, { action: "dislike" });
-        fetchResources().then((res) => setResources(res));
-    };
-
-    const tagScheme = {
-        promising: "blue",
-        recommend: "green",
-        disrecommend: "red",
-    };
+export const Home = ({
+    resources,
+    setResources,
+    selectedResource,
+    setSelectedResource,
+    usernames,
+    linkPreviews,
+}: HomeProps): JSX.Element => {
+    const { onClose } = useDisclosure();
 
     const copyLikesResources = [...resources];
     const resourcesSortedByLikes = copyLikesResources.sort(
@@ -86,6 +54,23 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
 
     return (
         <>
+            {selectedResource !== undefined ? (
+                <ResourceDetail
+                    isOpen={true}
+                    onClose={onClose}
+                    resource={selectedResource}
+                    tagColor={
+                        tagScheme[
+                            selectedResource.recommendation_type as keyof typeof tagScheme
+                        ]
+                    }
+                    imageLink={linkPreviews[selectedResource.resource_id]}
+                    username={usernames[selectedResource.user_id]}
+                    setSelectedResource={setSelectedResource}
+                />
+            ) : (
+                <></>
+            )}
             <Flex
                 flexWrap={"nowrap"}
                 justifyContent={"flex-start"}
@@ -96,114 +81,14 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
                 {resourcesSortedByLikes
                     .slice(0, 5)
                     .map((resource: Resource) => (
-                        <Card
-                            margin={"1vw"}
+                        <ResourceCard
                             key={resource.resource_id}
-                            width={"30vw"}
-                            height={"60vh"}
-                        >
-                            <CardHeader>
-                                <Flex
-                                    flex="1"
-                                    gap="4"
-                                    alignItems="center"
-                                    flexWrap="wrap"
-                                    marginBottom={"4vh"}
-                                >
-                                    <Avatar
-                                        name={usernames[resource.user_id]}
-                                    />
-
-                                    <Box>
-                                        <Heading size="sm">
-                                            {usernames[resource.user_id]}
-                                        </Heading>
-                                        <Tag
-                                            colorScheme={
-                                                tagScheme[
-                                                    resource.recommendation_type as keyof typeof tagScheme
-                                                ]
-                                            }
-                                            textTransform={"capitalize"}
-                                        >
-                                            {resource.recommendation_type}
-                                        </Tag>
-                                    </Box>
-                                </Flex>
-                                <a
-                                    href={resource.url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {resource.resource_id in linkPreviews ? (
-                                        <Image
-                                            src={
-                                                linkPreviews[
-                                                    resource.resource_id
-                                                ]
-                                            }
-                                            alt=""
-                                            height={"13.5vh"}
-                                            width={"24vh"}
-                                            objectFit={"cover"}
-                                            margin={"auto"}
-                                        />
-                                    ) : (
-                                        <Skeleton
-                                            height={"13.5vh"}
-                                            width={"24vh"}
-                                            margin={"auto"}
-                                        />
-                                    )}
-                                </a>
-                                <Text fontWeight={"800"} textAlign={"center"}>
-                                    {resource.name}
-                                </Text>
-                            </CardHeader>
-                            <CardBody>
-                                <Text height={"14vh"} noOfLines={5}>
-                                    {resource.description}
-                                </Text>
-                            </CardBody>
-                            <CardFooter alignItems={"end"} justify={"center"}>
-                                <VStack>
-                                    <HStack>
-                                        <Tag
-                                            cursor={"pointer"}
-                                            onClick={() =>
-                                                handleLike(resource.resource_id)
-                                            }
-                                            fontWeight={"bold"}
-                                            colorScheme="green"
-                                        >
-                                            {" "}
-                                            Likes:{" "}
-                                        </Tag>{" "}
-                                        <Text>{resource.likes}</Text>
-                                        <Tag
-                                            cursor={"pointer"}
-                                            onClick={() =>
-                                                handleDislike(
-                                                    resource.resource_id
-                                                )
-                                            }
-                                            fontWeight={"bold"}
-                                            colorScheme="red"
-                                        >
-                                            {" "}
-                                            Dislikes:
-                                        </Tag>{" "}
-                                        <Text>{resource.dislikes}</Text>
-                                    </HStack>
-                                    <Text>
-                                        Submitted:{" "}
-                                        {moment(resource.creation_date).format(
-                                            "DD/MM/yyyy"
-                                        )}
-                                    </Text>
-                                </VStack>
-                            </CardFooter>
-                        </Card>
+                            resource={resource}
+                            setSelectedResource={setSelectedResource}
+                            usernames={usernames}
+                            linkPreviews={linkPreviews}
+                            setResources={setResources}
+                        />
                     ))}
             </Flex>
             <Table width={"90vw"} variant={"striped"}>
@@ -220,7 +105,12 @@ export const Home = ({ resources, setResources }: HomeProps): JSX.Element => {
                 </Thead>
                 <Tbody>
                     {resourcesSortedByDate.map((resource) => (
-                        <Tr key={resource.resource_id}>
+                        <Tr
+                            key={resource.resource_id}
+                            onClick={() => {
+                                setSelectedResource(resource);
+                            }}
+                        >
                             <Td>{resource.name}</Td>
                             <Td>{resource.author}</Td>
                             <Td textTransform={"capitalize"}>
