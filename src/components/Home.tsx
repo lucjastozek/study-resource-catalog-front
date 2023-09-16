@@ -10,6 +10,7 @@ import {
     Thead,
     Tooltip,
     Tr,
+    useColorMode,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
@@ -49,6 +50,10 @@ export const Home = ({
 }: HomeProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
     const filteredContent = filterContent(resources, usernames, searchInput);
+    const { colorMode } = useColorMode();
+
+    const placeholderColor = colorMode === "dark" ? "white" : "black";
+
     const copyLikesResources = [...filteredContent];
     const resourcesSortedByLikes = copyLikesResources.sort(
         (a, b) => b.likes - a.likes
@@ -66,6 +71,7 @@ export const Home = ({
                 width={"20vw"}
                 value={searchInput}
                 placeholder="Filter content..."
+                _placeholder={{ color: placeholderColor }}
             ></Input>
             {selectedResource !== undefined ? (
                 <ResourceDetail

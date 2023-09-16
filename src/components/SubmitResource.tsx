@@ -12,6 +12,7 @@ import {
     Select,
     Stack,
     Textarea,
+    useColorMode,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
@@ -47,8 +48,10 @@ export const SubmitResource = ({
         content_type: "video",
     };
     const [formValues, setFormValues] = useState<SubmitForm>(initialState);
+    const { colorMode } = useColorMode();
 
     const showFormToast = useCustomToast();
+    const placeholderColor = colorMode === "dark" ? "white" : "black";
 
     const handleSubmit = async () => {
         if (activeUser) {
@@ -96,6 +99,7 @@ export const SubmitResource = ({
                     formTarget="resource_name"
                     value={formValues.resource_name}
                     placeholder="Resource Name"
+                    _placeholder={{ color: placeholderColor }}
                 ></Input>
                 <Input
                     onChange={(e) =>
@@ -104,6 +108,7 @@ export const SubmitResource = ({
                     formTarget="author_name"
                     value={formValues.author_name}
                     placeholder="Author"
+                    _placeholder={{ color: placeholderColor }}
                 ></Input>
 
                 <InputGroup>
@@ -120,6 +125,7 @@ export const SubmitResource = ({
                         formTarget="url"
                         value={formValues.url}
                         placeholder="URL"
+                        _placeholder={{ color: placeholderColor }}
                     ></Input>
                 </InputGroup>
                 <Textarea
@@ -128,6 +134,7 @@ export const SubmitResource = ({
                     }
                     value={formValues.description}
                     placeholder="Description"
+                    _placeholder={{ color: placeholderColor }}
                 ></Textarea>
 
                 <InputGroup>
@@ -206,6 +213,7 @@ export const SubmitResource = ({
                     onChange={(e) => handleChangeForm("reason", e.target.value)}
                     value={formValues.reason}
                     placeholder="Reason for (anti)recommendation"
+                    _placeholder={{ color: placeholderColor }}
                 ></Textarea>
                 <Button onClick={handleSubmit}> Submit</Button>
             </Stack>

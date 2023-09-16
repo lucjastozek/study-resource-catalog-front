@@ -1,6 +1,7 @@
 import {
     Avatar,
     Box,
+    Button,
     Card,
     CardBody,
     CardFooter,
@@ -19,6 +20,11 @@ import { Resource } from "../interface/Resource";
 import { tagScheme } from "../utils/tagScheme";
 import { handleDislike, handleLike } from "../utils/likeHandlers";
 import { User } from "../interface/User";
+import {
+    handleDeleteFavourites,
+    handleDeleteResource,
+} from "../utils/deleteHandlers";
+import { useLocation } from "react-router-dom";
 
 interface ResourceCardProps {
     resource: Resource;
@@ -43,6 +49,8 @@ export function ResourceCard({
     setFavourites,
     activeUser,
 }: ResourceCardProps): JSX.Element {
+    const location = useLocation();
+
     return (
         <Card key={resource.resource_id}>
             <CardHeader
@@ -74,6 +82,21 @@ export function ResourceCard({
                             {resource.recommendation_type}
                         </Tag>
                     </Box>
+                    {activeUser.user_id === resource.user_id && (
+                        <Button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteResource(
+                                    resource.resource_id,
+                                    setResources
+                                );
+                            }}
+                            size={"sm"}
+                            marginLeft={"auto"}
+                        >
+                            Delete
+                        </Button>
+                    )}
                 </Flex>
                 <a href={resource.url} target="_blank" rel="noreferrer">
                     {resource.resource_id in linkPreviews ? (
@@ -146,6 +169,21 @@ export function ResourceCard({
                         Submitted:{" "}
                         {moment(resource.creation_date).format("DD/MM/yyyy")}
                     </Text>
+
+                    {location.pathname === "/study" && (
+                        <Button
+                            onClick={() =>
+                                handleDeleteFavourites(
+                                    resource.resource_id,
+                                    setResources,
+                                    setFavourites,
+                                    activeUser.user_id
+                                )
+                            }
+                        >
+                            Remove from Favourites
+                        </Button>
+                    )}
                 </VStack>
             </CardFooter>
         </Card>
