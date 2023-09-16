@@ -18,6 +18,7 @@ import { User } from "../interface/User";
 import { tagScheme } from "../utils/tagScheme";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
+import { filterContent } from "../utils/filterContent";
 
 interface HomeProps {
     resources: Resource[];
@@ -47,13 +48,7 @@ export const Home = ({
     setFavourites,
 }: HomeProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
-    const filteredContent = resources.filter(
-        (resource) =>
-            resource.description.includes(searchInput) ||
-            resource.name.includes(searchInput) ||
-            resource.author.includes(searchInput) ||
-            usernames[resource.user_id].includes(searchInput)
-    );
+    const filteredContent = filterContent(resources, usernames, searchInput);
     const copyLikesResources = [...filteredContent];
     const resourcesSortedByLikes = copyLikesResources.sort(
         (a, b) => b.likes - a.likes
