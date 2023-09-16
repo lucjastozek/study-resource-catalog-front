@@ -2,6 +2,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
     Grid,
     IconButton,
+    Input,
     Table,
     Tbody,
     Td,
@@ -11,11 +12,12 @@ import {
     Tr,
 } from "@chakra-ui/react";
 import moment from "moment";
+import { useState } from "react";
 import { Resource } from "../interface/Resource";
+import { User } from "../interface/User";
+import { tagScheme } from "../utils/tagScheme";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
-import { tagScheme } from "../utils/tagScheme";
-import { User } from "../interface/User";
 
 interface HomeProps {
     resources: Resource[];
@@ -44,18 +46,32 @@ export const Home = ({
     activeUser,
     setFavourites,
 }: HomeProps): JSX.Element => {
-    const copyLikesResources = [...resources];
+    const [searchInput, setSearchInput] = useState<string>("");
+    const filteredContent = resources.filter(
+        (resource) =>
+            resource.description.includes(searchInput) ||
+            resource.name.includes(searchInput) ||
+            resource.author.includes(searchInput) ||
+            usernames[resource.user_id].includes(searchInput)
+    );
+    const copyLikesResources = [...filteredContent];
     const resourcesSortedByLikes = copyLikesResources.sort(
         (a, b) => b.likes - a.likes
     );
 
-    const copyDateResources = [...resources];
+    const copyDateResources = [...filteredContent];
     const resourcesSortedByDate = copyDateResources.sort((a, b) =>
         moment(b.creation_date).diff(moment(a.creation_date))
     );
 
     return (
         <>
+            <Input
+                onChange={(e) => setSearchInput(e.target.value)}
+                width={"20vw"}
+                value={searchInput}
+                placeholder="Filter content..."
+            ></Input>
             {selectedResource !== undefined ? (
                 <ResourceDetail
                     isOpen={true}
