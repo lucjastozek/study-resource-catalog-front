@@ -1,4 +1,4 @@
-import { Grid, Heading, Input } from "@chakra-ui/react";
+import { Grid, Heading, Input, useColorMode } from "@chakra-ui/react";
 import { Resource } from "../interface/Resource";
 import { ResourceCard } from "./ResourceCard";
 import moment from "moment";
@@ -40,7 +40,9 @@ export const ToStudy = ({
         searchInput
     );
 
-    console.log(filteredFavourites);
+    const { colorMode } = useColorMode();
+    const placeholderColor = colorMode === "dark" ? "white" : "black";
+
     return (
         <>
             <Heading>Your favourites</Heading>
@@ -49,7 +51,8 @@ export const ToStudy = ({
                 onChange={(e) => setSearchInput(e.target.value)}
                 width={"20vw"}
                 value={searchInput}
-                placeholder="Filter content..."
+                placeholder="Filter favourites..."
+                _placeholder={{ color: placeholderColor }}
             ></Input>
             {selectedResource !== undefined ? (
                 <ResourceDetail
