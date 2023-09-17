@@ -36,6 +36,7 @@ import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
 import { AboutUs } from "./AboutUs";
+import { Footer } from "./Footer";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -290,6 +291,7 @@ function App() {
                         </Switch>
                     </VStack>
                 </Router>
+                <Footer />
             </Flex>
         </div>
     );
