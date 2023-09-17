@@ -143,25 +143,48 @@ function App() {
                                 </PopoverTrigger>
                             </Box>
                             <Portal>
-                                <PopoverContent>
-                                    <PopoverArrow />
-                                    <PopoverHeader>
-                                        Do you want to sign out?
-                                    </PopoverHeader>
-                                    <PopoverCloseButton />
-                                    <PopoverBody>
-                                        <Button
-                                            colorScheme="blue"
-                                            onClick={() =>
-                                                setActiveUser(
-                                                    JSON.parse(initialUser)
-                                                )
-                                            }
-                                        >
-                                            <a href="/users">Sign Out</a>
-                                        </Button>
-                                    </PopoverBody>
-                                </PopoverContent>
+                                {userImage !== "./undefined-avatar.png" && (
+                                    <PopoverContent>
+                                        <PopoverArrow />
+                                        <PopoverHeader>
+                                            Do you want to sign out?
+                                        </PopoverHeader>
+                                        <PopoverCloseButton />
+                                        <PopoverBody>
+                                            <Button
+                                                colorScheme="blue"
+                                                onClick={() =>
+                                                    setActiveUser(
+                                                        JSON.parse(initialUser)
+                                                    )
+                                                }
+                                            >
+                                                <a href="/users">Sign Out</a>
+                                            </Button>
+                                        </PopoverBody>
+                                    </PopoverContent>
+                                )}
+                                {userImage === "./undefined-avatar.png" && (
+                                    <PopoverContent>
+                                        <PopoverArrow />
+                                        <PopoverHeader>
+                                            Do you want to sign in?
+                                        </PopoverHeader>
+                                        <PopoverCloseButton />
+                                        <PopoverBody>
+                                            <Button
+                                                colorScheme="blue"
+                                                onClick={() =>
+                                                    setActiveUser(
+                                                        JSON.parse(initialUser)
+                                                    )
+                                                }
+                                            >
+                                                <a href="/users">Sign in</a>
+                                            </Button>
+                                        </PopoverBody>
+                                    </PopoverContent>
+                                )}
                             </Portal>
                         </Popover>
                     </Flex>
