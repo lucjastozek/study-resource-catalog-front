@@ -62,9 +62,14 @@ export function ResourceCard({
                     flexWrap="wrap"
                     marginBottom={"2vh"}
                 >
-                    <Avatar name={usernames[resource.user_id]} />
+                    <Avatar
+                        name={usernames[resource.user_id]}
+                        src={`../src/avatars/${
+                            usernames[resource.user_id]
+                        }-avatar.png`}
+                    />
 
-                    <Box>
+                    <Box mb={2}>
                         <Heading size="sm" mb={2} mt={1}>
                             {usernames[resource.user_id]}
                         </Heading>

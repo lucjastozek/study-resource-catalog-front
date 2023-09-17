@@ -84,7 +84,10 @@ export function ResourceDetail({
                         flexWrap="wrap"
                         marginBottom={"4vh"}
                     >
-                        <Avatar name={username} />
+                        <Avatar
+                            name={username}
+                            src={`../src/avatars/${username}-avatar.png`}
+                        />
 
                         <Box>
                             <Heading size="sm">{username}</Heading>

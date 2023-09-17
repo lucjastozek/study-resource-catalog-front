@@ -106,7 +106,8 @@ function App() {
                         <Popover>
                             <PopoverTrigger>
                                 <Avatar
-                                    src="https://bit.ly/broken-link"
+                                    src={`../src/avatars/${activeUser.name}-avatar.png`}
+                                    // src="https://bit.ly/broken-link"
                                     name={activeUser?.name}
                                 />
                             </PopoverTrigger>
