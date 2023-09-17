@@ -60,12 +60,12 @@ export function ResourceCard({
                     gap="4"
                     alignItems="center"
                     flexWrap="wrap"
-                    marginBottom={"4vh"}
+                    marginBottom={"2vh"}
                 >
                     <Avatar name={usernames[resource.user_id]} />
 
                     <Box>
-                        <Heading size="sm">
+                        <Heading size="sm" mb={2} mt={1}>
                             {usernames[resource.user_id]}
                         </Heading>
                         <Tag
@@ -98,7 +98,7 @@ export function ResourceCard({
                         />
                     )}
                 </a>
-                <Text fontWeight={"800"} textAlign={"center"}>
+                <Text fontWeight={"800"} textAlign={"center"} mt={5}>
                     {resource.name}
                 </Text>
             </CardHeader>
