@@ -35,6 +35,8 @@ import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
+import { AboutUs } from "./AboutUs";
+import { Footer } from "./Footer";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -210,6 +212,11 @@ function App() {
                                     {" "}
                                     <Button>Submit New</Button>
                                 </Link>
+
+                                <Link to="/info">
+                                    {" "}
+                                    <Button>About Us</Button>
+                                </Link>
                             </HStack>
                         </nav>
                         <Switch>
@@ -278,9 +285,13 @@ function App() {
                                     </>
                                 )}
                             </Route>
+                            <Route path="/info">
+                                <AboutUs />
+                            </Route>
                         </Switch>
                     </VStack>
                 </Router>
+                <Footer />
             </Flex>
         </div>
     );

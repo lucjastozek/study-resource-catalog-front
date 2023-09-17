@@ -71,48 +71,54 @@ export function UserLogin({
                 <TabPanels>
                     <TabPanel width={"50vw"}>
                         <Heading>Sign in!</Heading>
-                        <Select
-                            placeholder="Select a user"
-                            onChange={(e) =>
-                                setActiveUser(
-                                    listedUsers[Number(e.target.value)]
-                                )
-                            }
-                            id="user-selector"
-                        >
-                            {listedUsers.map((user, index) => (
-                                <option key={user.user_id} value={index}>
-                                    {user.name}
-                                </option>
-                            ))}
-                        </Select>
+                        <div style={{ marginBottom: "300px" }}>
+                            <Select
+                                placeholder="Select a user"
+                                onChange={(e) =>
+                                    setActiveUser(
+                                        listedUsers[Number(e.target.value)]
+                                    )
+                                }
+                                id="user-selector"
+                            >
+                                {listedUsers.map((user, index) => (
+                                    <option key={user.user_id} value={index}>
+                                        {user.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </div>
                     </TabPanel>
                     <TabPanel width={"50vw"}>
-                        <Flex direction={"column"}>
-                            <Heading>Create a new user!</Heading>
+                        <div style={{ marginBottom: "218px" }}>
+                            <Flex direction={"column"}>
+                                <Heading>Create a new user!</Heading>
 
-                            <Input
-                                value={nameInput}
-                                onChange={(e) =>
-                                    handleNameInput(e.target.value)
-                                }
-                                id="sign-up-input"
-                            />
-                            <Checkbox
-                                size={"lg"}
-                                isChecked={isFaculty}
-                                onChange={(e) => setIsFaculty(e.target.checked)}
-                            >
-                                Faculty Member
-                            </Checkbox>
+                                <Input
+                                    value={nameInput}
+                                    onChange={(e) =>
+                                        handleNameInput(e.target.value)
+                                    }
+                                    id="sign-up-input"
+                                />
+                                <Checkbox
+                                    size={"lg"}
+                                    isChecked={isFaculty}
+                                    onChange={(e) =>
+                                        setIsFaculty(e.target.checked)
+                                    }
+                                >
+                                    Faculty Member
+                                </Checkbox>
 
-                            <Button
-                                onClick={handleSubmitName}
-                                marginTop={"2vh"}
-                            >
-                                Sign up
-                            </Button>
-                        </Flex>
+                                <Button
+                                    onClick={handleSubmitName}
+                                    marginTop={"2vh"}
+                                >
+                                    Sign up
+                                </Button>
+                            </Flex>
+                        </div>
                     </TabPanel>
                 </TabPanels>
             </Tabs>
