@@ -108,7 +108,7 @@ function App() {
                             <Box ml={20}>
                                 <PopoverTrigger>
                                     <Avatar
-                                        src={`../src/avatars/${activeUser.name}-avatar.png`}
+                                        src={`./${activeUser.name}-avatar.png`}
                                         // src="https://bit.ly/broken-link"
                                         name={activeUser?.name}
                                     />

@@ -64,9 +64,7 @@ export function ResourceCard({
                 >
                     <Avatar
                         name={usernames[resource.user_id]}
-                        src={`../src/avatars/${
-                            usernames[resource.user_id]
-                        }-avatar.png`}
+                        src={`./${usernames[resource.user_id]}-avatar.png`}
                     />
 
                     <Box mb={2}>

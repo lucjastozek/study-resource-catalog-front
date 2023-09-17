@@ -86,7 +86,7 @@ export function ResourceDetail({
                     >
                         <Avatar
                             name={username}
-                            src={`../src/avatars/${username}-avatar.png`}
+                            src={`./${username}-avatar.png`}
                         />
 
                         <Box>
