@@ -120,32 +120,47 @@ export function ResourceDetail({
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Text>
-                        <Text fontWeight={"bold"}>Author: </Text>
-                        {resource.author}
+                    <Text mb={2}>
+                        <Text>
+                            <span style={{ fontWeight: "bold" }}>Author:</span>{" "}
+                            {resource.author}
+                        </Text>
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Description: </Text>
+                    <Text mb={2}>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Description:{" "}
+                        </Text>
                         {resource.description}
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Reason: </Text>
+                    <Text mb={2}>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Reason:{" "}
+                        </Text>
                         {resource.reason}
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Content type: </Text>
-                        {formatContentType(resource.content_type)}
-                    </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Stage: </Text>
+                    <Text mb={2}>
+                        <span style={{ fontWeight: "bold" }}>
+                            Content type:
+                        </span>{" "}
+                        {formatContentType(resource.content_type)}{" "}
+                        <span
+                            style={{ fontWeight: "bold", marginLeft: "40px" }}
+                        >
+                            Stage:
+                        </span>{" "}
                         Build week {resource.stage}
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Link: </Text>
+
+                    <Text mb={2}>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Link:{" "}
+                        </Text>
                         <a href={resource.url}>{resource.url}</a>
                     </Text>
                     <Text>
-                        <Text fontWeight={"bold"}>Creation Date: </Text>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Creation Date:{" "}
+                        </Text>
                         {moment(resource.creation_date).format("DD/MM/YYYY")}
                     </Text>
                 </ModalBody>
