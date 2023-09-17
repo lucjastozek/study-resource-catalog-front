@@ -20,10 +20,7 @@ import { Resource } from "../interface/Resource";
 import { tagScheme } from "../utils/tagScheme";
 import { handleDislike, handleLike } from "../utils/likeHandlers";
 import { User } from "../interface/User";
-import {
-    handleDeleteFavourites,
-    handleDeleteResource,
-} from "../utils/deleteHandlers";
+import { handleDeleteFavourites } from "../utils/deleteHandlers";
 import { useLocation } from "react-router-dom";
 
 interface ResourceCardProps {
@@ -63,12 +60,17 @@ export function ResourceCard({
                     gap="4"
                     alignItems="center"
                     flexWrap="wrap"
-                    marginBottom={"4vh"}
+                    marginBottom={"2vh"}
                 >
-                    <Avatar name={usernames[resource.user_id]} />
+                    <Avatar
+                        name={usernames[resource.user_id]}
+                        src={`../src/avatars/${
+                            usernames[resource.user_id]
+                        }-avatar.png`}
+                    />
 
-                    <Box>
-                        <Heading size="sm">
+                    <Box mb={2}>
+                        <Heading size="sm" mb={2} mt={1}>
                             {usernames[resource.user_id]}
                         </Heading>
                         <Tag
@@ -82,21 +84,6 @@ export function ResourceCard({
                             {resource.recommendation_type}
                         </Tag>
                     </Box>
-                    {activeUser.user_id === resource.user_id && (
-                        <Button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteResource(
-                                    resource.resource_id,
-                                    setResources
-                                );
-                            }}
-                            size={"sm"}
-                            marginLeft={"auto"}
-                        >
-                            Delete
-                        </Button>
-                    )}
                 </Flex>
                 <a href={resource.url} target="_blank" rel="noreferrer">
                     {resource.resource_id in linkPreviews ? (
@@ -116,7 +103,7 @@ export function ResourceCard({
                         />
                     )}
                 </a>
-                <Text fontWeight={"800"} textAlign={"center"}>
+                <Text fontWeight={"800"} textAlign={"center"} mt={5}>
                     {resource.name}
                 </Text>
             </CardHeader>

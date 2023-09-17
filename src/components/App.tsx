@@ -2,6 +2,7 @@ import {
     Alert,
     AlertIcon,
     Avatar,
+    Box,
     Button,
     Container,
     Flex,
@@ -22,16 +23,16 @@ import { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Resource } from "../interface/Resource";
 import { User } from "../interface/User";
+import { fetchFavourites } from "../utils/fetchFavourites";
+import { fetchImage } from "../utils/fetchImage";
 import { fetchResources } from "../utils/fetchResources";
+import { fetchUserName } from "../utils/fetchUserName";
 import { fetchUsers } from "../utils/fetchUsers";
 import "./App.css";
 import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
-import { fetchFavourites } from "../utils/fetchFavourites";
-import { fetchUserName } from "../utils/fetchUserName";
-import { fetchImage } from "../utils/fetchImage";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -100,16 +101,19 @@ function App() {
                         <Button onClick={toggleColorMode}>
                             Toggle {colorMode === "light" ? "Dark" : "Light"}
                         </Button>
-                        <Heading textAlign={"center"}>
+                        <Heading textAlign={"center"} mb={5} mt={5}>
                             Study Resources Catalog
                         </Heading>
                         <Popover>
-                            <PopoverTrigger>
-                                <Avatar
-                                    src="https://bit.ly/broken-link"
-                                    name={activeUser?.name}
-                                />
-                            </PopoverTrigger>
+                            <Box ml={20}>
+                                <PopoverTrigger>
+                                    <Avatar
+                                        src={`../src/avatars/${activeUser.name}-avatar.png`}
+                                        // src="https://bit.ly/broken-link"
+                                        name={activeUser?.name}
+                                    />
+                                </PopoverTrigger>
+                            </Box>
                             <Portal>
                                 <PopoverContent>
                                     <PopoverArrow />
@@ -157,7 +161,6 @@ function App() {
                                 </Link>
                             </HStack>
                         </nav>
-
                         <Switch>
                             <Route path="/home">
                                 <Home

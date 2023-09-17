@@ -25,6 +25,7 @@ import axios from "axios";
 import { User } from "../interface/User";
 import useCustomToast from "./useCustomToast";
 import { fetchFavourites } from "../utils/fetchFavourites";
+import { handleDeleteResource } from "../utils/deleteHandlers";
 
 interface ResourceDetailProps {
     isOpen: boolean;
@@ -35,6 +36,7 @@ interface ResourceDetailProps {
     setSelectedResource: React.Dispatch<
         React.SetStateAction<Resource | undefined>
     >;
+    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     activeUser: User;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
@@ -46,6 +48,7 @@ export function ResourceDetail({
     imageLink,
     username,
     setSelectedResource,
+    setResources,
     activeUser,
     setFavourites,
 }: ResourceDetailProps): JSX.Element {
@@ -81,7 +84,10 @@ export function ResourceDetail({
                         flexWrap="wrap"
                         marginBottom={"4vh"}
                     >
-                        <Avatar name={username} />
+                        <Avatar
+                            name={username}
+                            src={`../src/avatars/${username}-avatar.png`}
+                        />
 
                         <Box>
                             <Heading size="sm">{username}</Heading>
@@ -117,32 +123,47 @@ export function ResourceDetail({
                 </ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Text>
-                        <Text fontWeight={"bold"}>Author: </Text>
-                        {resource.author}
+                    <Text mb={2}>
+                        <Text>
+                            <span style={{ fontWeight: "bold" }}>Author:</span>{" "}
+                            {resource.author}
+                        </Text>
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Description: </Text>
+                    <Text mb={2}>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Description:{" "}
+                        </Text>
                         {resource.description}
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Reason: </Text>
+                    <Text mb={2}>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Reason:{" "}
+                        </Text>
                         {resource.reason}
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Content type: </Text>
-                        {formatContentType(resource.content_type)}
-                    </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Stage: </Text>
+                    <Text mb={2}>
+                        <span style={{ fontWeight: "bold" }}>
+                            Content type:
+                        </span>{" "}
+                        {formatContentType(resource.content_type)}{" "}
+                        <span
+                            style={{ fontWeight: "bold", marginLeft: "40px" }}
+                        >
+                            Stage:
+                        </span>{" "}
                         Build week {resource.stage}
                     </Text>
-                    <Text>
-                        <Text fontWeight={"bold"}>Link: </Text>
+
+                    <Text mb={2}>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Link:{" "}
+                        </Text>
                         <a href={resource.url}>{resource.url}</a>
                     </Text>
                     <Text>
-                        <Text fontWeight={"bold"}>Creation Date: </Text>
+                        <Text mb={1} fontWeight={"bold"}>
+                            Creation Date:{" "}
+                        </Text>
                         {moment(resource.creation_date).format("DD/MM/YYYY")}
                     </Text>
                 </ModalBody>
@@ -169,6 +190,22 @@ export function ResourceDetail({
                     >
                         Add To Favourites!
                     </Button>
+                    {activeUser.user_id === resource.user_id && (
+                        <Button
+                            colorScheme="red"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteResource(
+                                    resource.resource_id,
+                                    setResources
+                                );
+                            }}
+                            size={"sm"}
+                            marginLeft={"auto"}
+                        >
+                            Delete
+                        </Button>
+                    )}
                 </ModalFooter>
             </ModalContent>
         </Modal>
