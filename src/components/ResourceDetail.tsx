@@ -25,6 +25,7 @@ import axios from "axios";
 import { User } from "../interface/User";
 import useCustomToast from "./useCustomToast";
 import { fetchFavourites } from "../utils/fetchFavourites";
+import { handleDeleteResource } from "../utils/deleteHandlers";
 
 interface ResourceDetailProps {
     isOpen: boolean;
@@ -35,6 +36,7 @@ interface ResourceDetailProps {
     setSelectedResource: React.Dispatch<
         React.SetStateAction<Resource | undefined>
     >;
+    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     activeUser: User;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
@@ -46,6 +48,7 @@ export function ResourceDetail({
     imageLink,
     username,
     setSelectedResource,
+    setResources,
     activeUser,
     setFavourites,
 }: ResourceDetailProps): JSX.Element {
@@ -169,6 +172,22 @@ export function ResourceDetail({
                     >
                         Add To Favourites!
                     </Button>
+                    {activeUser.user_id === resource.user_id && (
+                        <Button
+                            colorScheme="red"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteResource(
+                                    resource.resource_id,
+                                    setResources
+                                );
+                            }}
+                            size={"sm"}
+                            marginLeft={"auto"}
+                        >
+                            Delete
+                        </Button>
+                    )}
                 </ModalFooter>
             </ModalContent>
         </Modal>

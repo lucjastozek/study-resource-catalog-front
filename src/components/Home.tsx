@@ -85,6 +85,7 @@ export const Home = ({
                     imageLink={linkPreviews[selectedResource.resource_id]}
                     username={usernames[selectedResource.user_id]}
                     setSelectedResource={setSelectedResource}
+                    setResources={setResources}
                     activeUser={activeUser}
                     setFavourites={setFavourites}
                 />
