@@ -5,7 +5,7 @@ export function AboutUs() {
         <Center h="20vh" mt="10">
             <div style={{ textAlign: "center" }}>
                 <Text fontSize="3xl" mt="20" mb="8">
-                    We are Academy Cophort 7 C2 Group.
+                    We are Academy Cohort 7 C2 Group.
                 </Text>
                 <Center mt="5">
                     <Stack spacing={4} direction="row" align="center">
