@@ -162,6 +162,18 @@ function App() {
                             </HStack>
                         </nav>
                         <Switch>
+                            <Route exact path="/">
+                                <Home
+                                    resources={resources}
+                                    setResources={setResources}
+                                    selectedResource={selectedResource}
+                                    setSelectedResource={setSelectedResource}
+                                    usernames={usernames}
+                                    linkPreviews={linkPreviews}
+                                    activeUser={activeUser}
+                                    setFavourites={setFavourites}
+                                />
+                            </Route>
                             <Route path="/home">
                                 <Home
                                     resources={resources}
