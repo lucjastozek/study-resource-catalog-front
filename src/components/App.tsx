@@ -131,7 +131,7 @@ function App() {
                                         {userImage !==
                                             "./undefined-avatar.png" && (
                                             <Text mt={2}>
-                                                Logged as {activeUser?.name}{" "}
+                                                Logged in as {activeUser?.name}{" "}
                                             </Text>
                                         )}
                                         {userImage ===
