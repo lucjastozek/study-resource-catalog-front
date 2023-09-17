@@ -1,8 +1,11 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, SearchIcon } from "@chakra-ui/icons";
 import {
+    Center,
     Grid,
     IconButton,
     Input,
+    InputGroup,
+    InputLeftElement,
     Table,
     Tbody,
     Td,
@@ -16,10 +19,10 @@ import moment from "moment";
 import { useState } from "react";
 import { Resource } from "../interface/Resource";
 import { User } from "../interface/User";
+import { filterContent } from "../utils/filterContent";
 import { tagScheme } from "../utils/tagScheme";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
-import { filterContent } from "../utils/filterContent";
 
 interface HomeProps {
     resources: Resource[];
@@ -66,13 +69,25 @@ export const Home = ({
 
     return (
         <>
-            <Input
-                onChange={(e) => setSearchInput(e.target.value)}
-                width={"20vw"}
-                value={searchInput}
-                placeholder="Filter content..."
-                _placeholder={{ color: placeholderColor }}
-            ></Input>
+            <Center>
+                <InputGroup>
+                    <InputLeftElement
+                        pointerEvents="none"
+                        style={{ transform: "translateY(11px)" }}
+                    >
+                        <SearchIcon color="gray.300" />
+                    </InputLeftElement>
+                    <Input
+                        mt={3}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        width={"20vw"}
+                        value={searchInput}
+                        placeholder="Find resources..."
+                        _placeholder={{ color: placeholderColor }}
+                    ></Input>
+                </InputGroup>
+            </Center>
+
             {selectedResource !== undefined ? (
                 <ResourceDetail
                     isOpen={true}
