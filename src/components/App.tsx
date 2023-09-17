@@ -2,11 +2,13 @@ import {
     Alert,
     AlertIcon,
     Avatar,
+    AvatarBadge,
     Box,
     Button,
     Container,
     Flex,
     HStack,
+    Text,
     Heading,
     Popover,
     PopoverArrow,
@@ -55,6 +57,8 @@ function App() {
     const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
         {}
     );
+    const userImage = `./${activeUser.name}-avatar.png`;
+    console.log(userImage);
 
     useEffect(() => {
         fetchUsers().then((users) => setListedUsers(users));
@@ -105,13 +109,37 @@ function App() {
                             Study Resources Catalog
                         </Heading>
                         <Popover>
-                            <Box ml={20}>
+                            <Box>
                                 <PopoverTrigger>
-                                    <Avatar
-                                        src={`./${activeUser.name}-avatar.png`}
-                                        // src="https://bit.ly/broken-link"
-                                        name={activeUser?.name}
-                                    />
+                                    <Box textAlign="center">
+                                        <Avatar
+                                            src={userImage}
+                                            // src="https://bit.ly/broken-link"
+                                            name={activeUser?.name}
+                                        >
+                                            {userImage !==
+                                                "./undefined-avatar.png" && (
+                                                <AvatarBadge
+                                                    boxSize="1.25em"
+                                                    bg="green.500"
+                                                />
+                                            )}
+                                        </Avatar>
+
+                                        {userImage !==
+                                            "./undefined-avatar.png" && (
+                                            <Text mt={2}>
+                                                Logged as {activeUser?.name}{" "}
+                                            </Text>
+                                        )}
+                                        {userImage ===
+                                            "./undefined-avatar.png" && (
+                                            <Text mt={2}>
+                                                Login to submit{" "}
+                                                {activeUser?.name}{" "}
+                                            </Text>
+                                        )}
+                                    </Box>
                                 </PopoverTrigger>
                             </Box>
                             <Portal>
