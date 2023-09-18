@@ -194,10 +194,10 @@ export const SubmitResource = ({
                                 onClick={() => handleSelectTags(tag)}
                                 borderRadius={"9"}
                                 style={{
-                                    paddingTop: "0.8vh",
+                                    paddingTop: "1vh",
                                     paddingBottom: "0.5vh",
-                                    paddingLeft: "1vh",
-                                    paddingRight: "1vh",
+                                    paddingLeft: "1.5vh",
+                                    paddingRight: "1.5vh",
                                 }}
                             >
                                 {tag}

@@ -60,7 +60,7 @@ export function ResourceCard({
                     setSelectedResource(resource);
                 }}
                 marginBottom={"0"}
-                mb={"-7"}
+                mb={"-5"}
             >
                 <Flex
                     flex="1"
@@ -74,7 +74,7 @@ export function ResourceCard({
                         src={`./${usernames[resource.user_id]}-avatar.png`}
                     />
 
-                    <Box mb={2}>
+                    <Box mb={1}>
                         <Heading size="sm" mb={2} mt={1}>
                             {usernames[resource.user_id]}
                         </Heading>
@@ -98,16 +98,16 @@ export function ResourceCard({
                                     colorSchemes[index % colorSchemes.length]
                                 }
                                 key={index}
-                                fontSize={{ base: "xs", lg: "sm" }}
-                                size={{ base: "xs", lg: "sm" }}
+                                fontSize={{ base: "xs", lg: "base" }}
+                                size={{ base: "xs", lg: "base" }}
                                 margin={{ base: "0.2rem", lg: "0.5rem" }}
                                 variant={"solid"}
                                 borderRadius={"9"}
                                 style={{
                                     paddingTop: "0.8vh",
-                                    paddingBottom: "0.5vh",
-                                    paddingLeft: "1vh",
-                                    paddingRight: "1vh",
+                                    paddingBottom: "0.4vh",
+                                    paddingLeft: "1.2vh",
+                                    paddingRight: "1.2vh",
                                 }}
                             >
                                 {tag.name}
@@ -138,11 +138,13 @@ export function ResourceCard({
                 </Text>
             </CardHeader>
             <CardBody
+                marginLeft={2}
+                marginRight={2}
                 onClick={() => {
                     setSelectedResource(resource);
                 }}
             >
-                <Text noOfLines={5}>{resource.description}</Text>
+                <Text noOfLines={4}>{resource.description}</Text>
             </CardBody>
             <CardFooter alignItems={"end"} justify={"center"}>
                 <VStack>
