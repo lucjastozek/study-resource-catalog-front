@@ -1,13 +1,26 @@
-import { Grid, Heading, Input, useColorMode } from "@chakra-ui/react";
-import { Resource } from "../interface/Resource";
-import { ResourceCard } from "./ResourceCard";
+import {
+    Badge,
+    Center,
+    Flex,
+    Grid,
+    Heading,
+    Input,
+    InputGroup,
+    InputLeftElement,
+    useColorMode,
+} from "@chakra-ui/react";
 import moment from "moment";
-import { ResourceDetail } from "./ResourceDetail";
-import { tagScheme } from "../utils/tagScheme";
-import { User } from "../interface/User";
-import { filterContent } from "../utils/filterContent";
 import { useState } from "react";
+import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
+import { User } from "../interface/User";
+import { colorSchemes } from "../utils/colorSchemes";
+import { filterContent } from "../utils/filterContent";
+import { tagScheme } from "../utils/tagScheme";
+import { tags } from "../utils/tags";
+import { ResourceCard } from "./ResourceCard";
+import { ResourceDetail } from "./ResourceDetail";
+import { SearchIcon } from "@chakra-ui/icons";
 
 interface ToStudyProps {
     favourites: Resource[];
@@ -37,26 +50,86 @@ export const ToStudy = ({
     resourceTags,
 }: ToStudyProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const filteredFavourites = filterContent(
         favourites,
         usernames,
         searchInput
+    ).filter((resource) =>
+        selectedTags.length > 0
+            ? resourceTags
+                  .filter((r) => r.resource_id === resource.resource_id)
+                  .every((r) => selectedTags.includes(r.name))
+            : true
     );
 
     const { colorMode } = useColorMode();
     const placeholderColor = colorMode === "dark" ? "white" : "black";
 
+    const handleSelectTags = (tag: string) => {
+        if (selectedTags.includes(tag)) {
+            const newTags = selectedTags.filter((t) => t !== tag);
+            setSelectedTags(newTags);
+        } else {
+            setSelectedTags((prev) => [...prev, tag]);
+        }
+    };
+
     return (
         <>
             <Heading>Your favourites</Heading>
+            <Center marginInline={"auto"}>
+                <InputGroup>
+                    <InputLeftElement
+                        pointerEvents="none"
+                        style={{ transform: "translateY(11px)" }}
+                    >
+                        <SearchIcon color="gray.300" />
+                    </InputLeftElement>
+                    <Input
+                        mt={3}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        width={{ base: "100%", lg: "20vw" }}
+                        value={searchInput}
+                        placeholder="Find resources..."
+                        _placeholder={{ color: placeholderColor }}
+                    ></Input>
+                </InputGroup>
+            </Center>
+            <Flex
+                justifyContent={"center"}
+                flexWrap={{ base: "wrap", lg: "nowrap" }}
+            >
+                {tags.map((tag, index) => (
+                    <Badge
+                        colorScheme={colorSchemes[index % colorSchemes.length]}
+                        key={index}
+                        size={{ base: "xs", lg: "md" }}
+                        fontSize={{ base: "xs", lg: "md" }}
+                        margin={{ base: "0.2rem", lg: "0.5rem" }}
+                        variant={
+                            selectedTags.includes(tag) ? "solid" : "outline"
+                        }
+                        borderRadius={"5"}
+                        textAlign={"center"}
+                        padding={"0.5vh"}
+                        onClick={() => handleSelectTags(tag)}
+                    >
+                        {tag}
+                    </Badge>
+                ))}
+                <Badge
+                    fontSize={{ base: "xs", lg: "md" }}
+                    margin={{ base: "0.2rem", lg: "0.5rem" }}
+                    padding={"0.5vh"}
+                    borderRadius={"5"}
+                    size={{ base: "xs", lg: "md" }}
+                    onClick={() => setSelectedTags([])}
+                >
+                    Clear Tags
+                </Badge>
+            </Flex>
 
-            <Input
-                onChange={(e) => setSearchInput(e.target.value)}
-                width={"20vw"}
-                value={searchInput}
-                placeholder="Filter favourites..."
-                _placeholder={{ color: placeholderColor }}
-            ></Input>
             {selectedResource !== undefined ? (
                 <ResourceDetail
                     isOpen={true}

@@ -109,7 +109,10 @@ function App() {
                         paddingTop={"2vh"}
                         flexDirection={{ base: "column", lg: "row" }}
                     >
-                        <Button onClick={toggleColorMode}>
+                        <Button
+                            onClick={toggleColorMode}
+                            size={{ base: "sm", lg: "md" }}
+                        >
                             Toggle {colorMode === "light" ? "Dark" : "Light"}
                         </Button>
                         <Heading textAlign={"center"} mb={5} mt={5}>
@@ -118,7 +121,7 @@ function App() {
                         <Popover>
                             <Box>
                                 <PopoverTrigger>
-                                    <Box textAlign="center">
+                                    <Box textAlign="center" mb={"4"}>
                                         <Avatar
                                             src={userImage}
                                             // src="https://bit.ly/broken-link"
@@ -205,25 +208,35 @@ function App() {
                                 wrap={{ base: "wrap", lg: "nowrap" }}
                             >
                                 <Link to="/home">
-                                    <Button>Home</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Home
+                                    </Button>
                                 </Link>
 
                                 <Link to="/study">
-                                    <Button>Your Study Resources</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Your Study Resources
+                                    </Button>
                                 </Link>
 
                                 <Link to="/users">
-                                    <Button>Users</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Users
+                                    </Button>
                                 </Link>
 
                                 <Link to="/submit">
                                     {" "}
-                                    <Button>Submit New</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Submit New
+                                    </Button>
                                 </Link>
 
                                 <Link to="/info">
                                     {" "}
-                                    <Button>About Us</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        About Us
+                                    </Button>
                                 </Link>
                             </HStack>
                         </nav>

@@ -183,8 +183,8 @@ export const SubmitResource = ({
                                     colorSchemes[index % colorSchemes.length]
                                 }
                                 key={index}
-                                fontSize={"lg"}
-                                margin={"0.5rem"}
+                                fontSize={{ base: "sm", lg: "md" }}
+                                margin={{ base: "0.3rem", lg: "0.5rem" }}
                                 variant={
                                     selectedTags.includes(tag)
                                         ? "solid"

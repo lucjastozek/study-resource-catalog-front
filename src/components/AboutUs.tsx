@@ -2,7 +2,7 @@ import { Avatar, Box, Center, Link, Stack, Text } from "@chakra-ui/react";
 
 export function AboutUs() {
     return (
-        <Center h={{ base: "80vw", lg: "20vh" }} mt={{ base: 20, lg: 10 }}>
+        <Center h={{ base: "50vh", lg: "20vh" }} mt={{ base: 20, lg: 10 }}>
             <Box textAlign="center">
                 <Text fontSize={{ base: "xl", lg: "3xl" }} mt="20" mb="8">
                     We are Academy Cohort 7 C2 Group.

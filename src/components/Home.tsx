@@ -96,9 +96,9 @@ export const Home = ({
         }
     };
 
-    const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
+    const [isLargeScreen] = useMediaQuery("(min-width: 992px)");
 
-    const slicedArray = isLargerThan800
+    const slicedArray = isLargeScreen
         ? resourcesSortedByLikes.slice(0, 5)
         : resourcesSortedByDate;
 
@@ -130,8 +130,9 @@ export const Home = ({
                     <Badge
                         colorScheme={colorSchemes[index % colorSchemes.length]}
                         key={index}
-                        fontSize={"md"}
-                        margin={"0.5rem"}
+                        size={{ base: "sm", lg: "md" }}
+                        fontSize={{ base: "xs", lg: "md" }}
+                        margin={{ base: "0.2rem", lg: "0.5rem" }}
                         variant={
                             selectedTags.includes(tag) ? "solid" : "outline"
                         }
@@ -144,8 +145,9 @@ export const Home = ({
                     </Badge>
                 ))}
                 <Badge
-                    fontSize={"md"}
-                    margin={"0.5rem"}
+                    size={{ base: "sm", lg: "md" }}
+                    fontSize={{ base: "xs", lg: "md" }}
+                    margin={{ base: "0.2rem", lg: "0.5rem" }}
                     padding={"0.5vh"}
                     borderRadius={"5"}
                     onClick={() => setSelectedTags([])}
@@ -200,7 +202,7 @@ export const Home = ({
                 ))}
             </Grid>
 
-            {isLargerThan800 && (
+            {isLargeScreen && (
                 <Table
                     margin={"auto"}
                     size={{ base: "sm", lg: "md" }}

@@ -60,6 +60,7 @@ export function ResourceCard({
                     setSelectedResource(resource);
                 }}
                 marginBottom={"0"}
+                mb={"-7"}
             >
                 <Flex
                     flex="1"
@@ -97,8 +98,8 @@ export function ResourceCard({
                                     colorSchemes[index % colorSchemes.length]
                                 }
                                 key={index}
-                                fontSize={"md"}
-                                margin={"0.5rem"}
+                                fontSize={{ base: "sm", lg: "md" }}
+                                margin={{ base: "0.2rem", lg: "0.5rem" }}
                                 variant={"solid"}
                             >
                                 {tag.name}
