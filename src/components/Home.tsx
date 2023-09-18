@@ -130,16 +130,22 @@ export const Home = ({
                     <Badge
                         colorScheme={colorSchemes[index % colorSchemes.length]}
                         key={index}
-                        size={{ base: "sm", lg: "md" }}
-                        fontSize={{ base: "xs", lg: "md" }}
+                        size={{ base: "xs", lg: "sm" }}
+                        fontSize={{ base: "xs", lg: "sm" }}
                         margin={{ base: "0.2rem", lg: "0.5rem" }}
                         variant={
                             selectedTags.includes(tag) ? "solid" : "outline"
                         }
-                        borderRadius={"5"}
+                        borderRadius={"9"}
                         textAlign={"center"}
                         padding={"0.5vh"}
                         onClick={() => handleSelectTags(tag)}
+                        style={{
+                            paddingTop: "0.8vh",
+                            paddingBottom: "0.5vh",
+                            paddingLeft: "1vh",
+                            paddingRight: "1vh",
+                        }}
                     >
                         {tag}
                     </Badge>
@@ -149,8 +155,14 @@ export const Home = ({
                     fontSize={{ base: "xs", lg: "md" }}
                     margin={{ base: "0.2rem", lg: "0.5rem" }}
                     padding={"0.5vh"}
-                    borderRadius={"5"}
+                    borderRadius={"9"}
                     onClick={() => setSelectedTags([])}
+                    style={{
+                        paddingTop: "0.8vh",
+                        paddingBottom: "0.5vh",
+                        paddingLeft: "1vh",
+                        paddingRight: "1vh",
+                    }}
                 >
                     Clear Tags
                 </Badge>

@@ -112,9 +112,16 @@ export function ResourceDetail({
                                     colorSchemes[index % colorSchemes.length]
                                 }
                                 key={index}
-                                fontSize={"md"}
+                                fontSize={{ base: "xs", lg: "sm" }}
+                                size={{ base: "xs", lg: "sm" }}
                                 margin={"0.5rem"}
                                 variant={"solid"}
+                                style={{
+                                    paddingTop: "0.8vh",
+                                    paddingBottom: "0.5vh",
+                                    paddingLeft: "1vh",
+                                    paddingRight: "1vh",
+                                }}
                             >
                                 {tag.name}
                             </Badge>

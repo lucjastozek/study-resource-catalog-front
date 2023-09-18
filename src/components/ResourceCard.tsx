@@ -90,7 +90,7 @@ export function ResourceCard({
                         </Tag>
                     </Box>
                 </Flex>
-                <Flex justifyContent={"center"} alignItems={"center"}>
+                <Flex justifyContent={"center"} alignItems={"center"} mb="2">
                     {tags !== undefined &&
                         tags.slice(0, 3).map((tag, index) => (
                             <Badge
@@ -98,9 +98,17 @@ export function ResourceCard({
                                     colorSchemes[index % colorSchemes.length]
                                 }
                                 key={index}
-                                fontSize={{ base: "sm", lg: "md" }}
+                                fontSize={{ base: "xs", lg: "sm" }}
+                                size={{ base: "xs", lg: "sm" }}
                                 margin={{ base: "0.2rem", lg: "0.5rem" }}
                                 variant={"solid"}
+                                borderRadius={"9"}
+                                style={{
+                                    paddingTop: "0.8vh",
+                                    paddingBottom: "0.5vh",
+                                    paddingLeft: "1vh",
+                                    paddingRight: "1vh",
+                                }}
                             >
                                 {tag.name}
                             </Badge>

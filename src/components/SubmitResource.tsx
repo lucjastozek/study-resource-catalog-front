@@ -183,7 +183,8 @@ export const SubmitResource = ({
                                     colorSchemes[index % colorSchemes.length]
                                 }
                                 key={index}
-                                fontSize={{ base: "sm", lg: "md" }}
+                                fontSize={{ base: "xs", lg: "sm" }}
+                                size={{ base: "xs", lg: "sm" }}
                                 margin={{ base: "0.3rem", lg: "0.5rem" }}
                                 variant={
                                     selectedTags.includes(tag)
@@ -191,6 +192,13 @@ export const SubmitResource = ({
                                         : "outline"
                                 }
                                 onClick={() => handleSelectTags(tag)}
+                                borderRadius={"9"}
+                                style={{
+                                    paddingTop: "0.8vh",
+                                    paddingBottom: "0.5vh",
+                                    paddingLeft: "1vh",
+                                    paddingRight: "1vh",
+                                }}
                             >
                                 {tag}
                             </Badge>
