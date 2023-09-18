@@ -60,7 +60,6 @@ function App() {
         {}
     );
     const userImage = `./${activeUser.name}-avatar.png`;
-    console.log(userImage);
 
     useEffect(() => {
         fetchUsers().then((users) => setListedUsers(users));

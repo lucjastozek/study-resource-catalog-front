@@ -1,10 +1,12 @@
 import {
     Avatar,
+    Badge,
     Box,
     Button,
     Flex,
     Heading,
     Image,
+    Link,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -26,6 +28,11 @@ import { User } from "../interface/User";
 import useCustomToast from "./useCustomToast";
 import { fetchFavourites } from "../utils/fetchFavourites";
 import { handleDeleteResource } from "../utils/deleteHandlers";
+import { colorSchemes } from "../utils/colorSchemes";
+import { useEffect, useState } from "react";
+import { TagI } from "../interface/Tag";
+import { fetchTags } from "../utils/fetchTags";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ResourceDetailProps {
     isOpen: boolean;
@@ -54,6 +61,11 @@ export function ResourceDetail({
 }: ResourceDetailProps): JSX.Element {
     const { onClose } = useDisclosure();
     const toast = useCustomToast();
+    const [tags, setTags] = useState<TagI[]>([]);
+
+    useEffect(() => {
+        fetchTags(resource.resource_id).then((t) => setTags(t));
+    }, [resource.resource_id]);
 
     async function handleAddFavourite(resource_id: number, user_id: number) {
         await axios.post(baseUrl + "/favourites", {
@@ -77,13 +89,7 @@ export function ResourceDetail({
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>
-                    <Flex
-                        flex="1"
-                        gap="4"
-                        alignItems="center"
-                        flexWrap="wrap"
-                        marginBottom={"4vh"}
-                    >
+                    <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                         <Avatar
                             name={username}
                             src={`./${username}-avatar.png`}
@@ -98,6 +104,25 @@ export function ResourceDetail({
                                 {resource.recommendation_type}
                             </Tag>
                         </Box>
+                    </Flex>
+                    <Flex
+                        justifyContent={"center"}
+                        alignItems={"center"}
+                        marginBottom={"2vh"}
+                    >
+                        {tags.map((tag, index) => (
+                            <Badge
+                                colorScheme={
+                                    colorSchemes[index % colorSchemes.length]
+                                }
+                                key={index}
+                                fontSize={"md"}
+                                margin={"0.5rem"}
+                                variant={"solid"}
+                            >
+                                {tag.name}
+                            </Badge>
+                        ))}
                     </Flex>
                     <a href={resource.url} target="_blank" rel="noreferrer">
                         {imageLink ? (
@@ -117,7 +142,12 @@ export function ResourceDetail({
                             />
                         )}
                     </a>
-                    <Text fontWeight={"800"} textAlign={"center"}>
+
+                    <Text
+                        fontWeight={"800"}
+                        textAlign={"center"}
+                        marginTop={"2vh"}
+                    >
                         {resource.name}
                     </Text>
                 </ModalHeader>
@@ -129,6 +159,7 @@ export function ResourceDetail({
                             {resource.author}
                         </Text>
                     </Text>
+
                     <Text mb={2}>
                         <Text mb={1} fontWeight={"bold"}>
                             Description:{" "}
@@ -154,16 +185,16 @@ export function ResourceDetail({
                         Build week {resource.stage}
                     </Text>
 
-                    <Text mb={2}>
-                        <Text mb={1} fontWeight={"bold"}>
-                            Link:{" "}
-                        </Text>
-                        <a href={resource.url}>{resource.url}</a>
+                    <Text mb={2} fontWeight={"bold"}>
+                        Link:{" "}
+                        <Link isExternal color="teal.400" href={resource.url}>
+                            {resource.name} <ExternalLinkIcon mx="2px" />
+                        </Link>{" "}
                     </Text>
-                    <Text>
-                        <Text mb={1} fontWeight={"bold"}>
-                            Creation Date:{" "}
-                        </Text>
+                    <Text mb={1}>
+                        <span style={{ fontWeight: "bold" }}>
+                            Creation Date:
+                        </span>{" "}
                         {moment(resource.creation_date).format("DD/MM/YYYY")}
                     </Text>
                 </ModalBody>

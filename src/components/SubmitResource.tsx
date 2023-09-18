@@ -1,5 +1,8 @@
 import {
+    Badge,
     Button,
+    Card,
+    CardBody,
     Heading,
     Input,
     InputGroup,
@@ -12,20 +15,23 @@ import {
     Select,
     Stack,
     Textarea,
+    Text,
     useColorMode,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
-import { baseUrl } from "../baseUrl";
-import { contentTypes } from "../utils/contentTypes";
-import { formatContentType } from "../utils/formatContentType";
-import { User } from "../interface/User";
 import { z } from "zod";
-import { SubmitForm } from "../interface/submitForm";
-import useCustomToast from "./useCustomToast";
-import { formSchema } from "../schemas/formSchema";
+import { baseUrl } from "../baseUrl";
 import { Resource } from "../interface/Resource";
+import { User } from "../interface/User";
+import { SubmitForm } from "../interface/submitForm";
+import { formSchema } from "../schemas/formSchema";
+import { colorSchemes } from "../utils/colorSchemes";
+import { contentTypes } from "../utils/contentTypes";
 import { fetchResources } from "../utils/fetchResources";
+import { formatContentType } from "../utils/formatContentType";
+import { tags } from "../utils/tags";
+import useCustomToast from "./useCustomToast";
 
 interface SubmitResourceProps {
     activeUser?: User;
@@ -52,6 +58,7 @@ export const SubmitResource = ({
 
     const showFormToast = useCustomToast();
     const placeholderColor = colorMode === "dark" ? "white" : "black";
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     const handleSubmit = async () => {
         if (activeUser) {
@@ -59,8 +66,20 @@ export const SubmitResource = ({
                 const userid = { user_id: activeUser.user_id };
                 setFormValues((prev) => ({ ...prev, ...userid }));
                 formSchema.parse(formValues);
-                await axios.post(baseUrl + "/resources", formValues);
+                const resource = await axios.post(
+                    baseUrl + "/resources",
+                    formValues
+                );
+
+                for (const tag of selectedTags) {
+                    await axios.post(baseUrl + "/tags", {
+                        resource_id: resource.data[0].resource_id,
+                        name: tag,
+                    });
+                }
+
                 setFormValues(initialState);
+                setSelectedTags([]);
                 fetchResources().then((res) => setResources(res));
             } catch (error) {
                 if (error instanceof z.ZodError) {
@@ -136,6 +155,37 @@ export const SubmitResource = ({
                     placeholder="Description"
                     _placeholder={{ color: placeholderColor }}
                 ></Textarea>
+                <Card
+                    background={"#00000000"}
+                    border={"1px solid #40444e"}
+                    width={"40vw"}
+                    direction={"row"}
+                    align={"center"}
+                >
+                    <CardBody>
+                        <Text>Tags</Text>
+                        {tags.map((tag, index) => (
+                            <Badge
+                                colorScheme={
+                                    colorSchemes[index % colorSchemes.length]
+                                }
+                                key={index}
+                                fontSize={"lg"}
+                                margin={"0.5rem"}
+                                variant={
+                                    selectedTags.includes(tag)
+                                        ? "solid"
+                                        : "outline"
+                                }
+                                onClick={() =>
+                                    setSelectedTags((prev) => [...prev, tag])
+                                }
+                            >
+                                {tag}
+                            </Badge>
+                        ))}
+                    </CardBody>
+                </Card>
 
                 <InputGroup>
                     <InputLeftAddon w={"9rem"}> Content Type</InputLeftAddon>

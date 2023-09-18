@@ -9,7 +9,6 @@ export const handleDeleteResource = async (
     idToDelete: number,
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>
 ) => {
-    console.log(`${baseUrl}/resources/${idToDelete}`);
     await axios.delete(`${baseUrl}/resources/${idToDelete}`);
     fetchResources().then((res) => setResources(res));
 };
