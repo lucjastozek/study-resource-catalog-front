@@ -8,7 +8,6 @@ import {
     Container,
     Flex,
     HStack,
-    Text,
     Heading,
     Popover,
     PopoverArrow,
@@ -18,27 +17,28 @@ import {
     PopoverHeader,
     PopoverTrigger,
     Portal,
+    Text,
     VStack,
     useColorMode,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Resource } from "../interface/Resource";
+import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
 import { fetchFavourites } from "../utils/fetchFavourites";
 import { fetchImage } from "../utils/fetchImage";
 import { fetchResources } from "../utils/fetchResources";
+import { fetchTags } from "../utils/fetchTags";
 import { fetchUserName } from "../utils/fetchUserName";
 import { fetchUsers } from "../utils/fetchUsers";
+import { AboutUs } from "./AboutUs";
 import "./App.css";
+import { Footer } from "./Footer";
 import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
-import { AboutUs } from "./AboutUs";
-import { Footer } from "./Footer";
-import { fetchTags } from "../utils/fetchTags";
-import { TagI } from "../interface/Tag";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -107,8 +107,12 @@ function App() {
                         justify={"space-around"}
                         alignItems={"center"}
                         paddingTop={"2vh"}
+                        flexDirection={{ base: "column", lg: "row" }}
                     >
-                        <Button onClick={toggleColorMode}>
+                        <Button
+                            onClick={toggleColorMode}
+                            size={{ base: "sm", lg: "md" }}
+                        >
                             Toggle {colorMode === "light" ? "Dark" : "Light"}
                         </Button>
                         <Heading textAlign={"center"} mb={5} mt={5}>
@@ -117,7 +121,7 @@ function App() {
                         <Popover>
                             <Box>
                                 <PopoverTrigger>
-                                    <Box textAlign="center">
+                                    <Box textAlign="center" mb={"4"}>
                                         <Avatar
                                             src={userImage}
                                             // src="https://bit.ly/broken-link"
@@ -199,27 +203,40 @@ function App() {
                 <Router>
                     <VStack>
                         <nav>
-                            <HStack>
+                            <HStack
+                                justifyContent={"center"}
+                                wrap={{ base: "wrap", lg: "nowrap" }}
+                            >
                                 <Link to="/home">
-                                    <Button>Home</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Home
+                                    </Button>
                                 </Link>
 
                                 <Link to="/study">
-                                    <Button>Your Study Resources</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Your Study Resources
+                                    </Button>
                                 </Link>
 
                                 <Link to="/users">
-                                    <Button>Users</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Users
+                                    </Button>
                                 </Link>
 
                                 <Link to="/submit">
                                     {" "}
-                                    <Button>Submit New</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        Submit New
+                                    </Button>
                                 </Link>
 
                                 <Link to="/info">
                                     {" "}
-                                    <Button>About Us</Button>
+                                    <Button size={{ base: "sm", lg: "md" }}>
+                                        About Us
+                                    </Button>
                                 </Link>
                             </HStack>
                         </nav>

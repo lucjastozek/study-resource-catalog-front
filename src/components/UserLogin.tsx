@@ -63,13 +63,13 @@ export function UserLogin({
 
     return (
         <>
-            <Tabs variant="solid-rounded" colorScheme="teal">
+            <Tabs mt={"1rem"} variant="solid-rounded" colorScheme="teal">
                 <TabList>
                     <Tab>Sign In</Tab>
                     <Tab>Sign Up</Tab>
                 </TabList>
                 <TabPanels>
-                    <TabPanel width={"50vw"}>
+                    <TabPanel w={{ base: "100%", lg: "50vw" }}>
                         <Heading>Sign in!</Heading>
                         <div style={{ marginBottom: "300px" }}>
                             <Select
@@ -89,7 +89,7 @@ export function UserLogin({
                             </Select>
                         </div>
                     </TabPanel>
-                    <TabPanel width={"50vw"}>
+                    <TabPanel w={{ base: "100%", lg: "50vw" }}>
                         <div style={{ marginBottom: "218px" }}>
                             <Flex direction={"column"}>
                                 <Heading>Create a new user!</Heading>

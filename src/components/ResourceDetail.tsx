@@ -104,6 +104,7 @@ export function ResourceDetail({
                         justifyContent={"center"}
                         alignItems={"center"}
                         marginBottom={"2vh"}
+                        flexWrap={"wrap"}
                     >
                         {tags.map((tag, index) => (
                             <Badge
