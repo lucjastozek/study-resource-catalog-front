@@ -62,7 +62,12 @@ function App() {
         {}
     );
     const [resourceTags, setResourceTags] = useState<TagI[]>([]);
-    const userImage = `./${activeUser.name}-avatar.png`;
+
+    const userImage =
+        //Only the testing users will have images sine we are not go to implement the profile image loading feature.
+        activeUser.user_id < 52
+            ? `./${activeUser.name}-avatar.png`
+            : "https://bit.ly/broken-link";
 
     useEffect(() => {
         fetchUsers().then((users) => setListedUsers(users));
