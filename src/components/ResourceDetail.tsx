@@ -29,9 +29,7 @@ import useCustomToast from "./useCustomToast";
 import { fetchFavourites } from "../utils/fetchFavourites";
 import { handleDeleteResource } from "../utils/deleteHandlers";
 import { colorSchemes } from "../utils/colorSchemes";
-import { useEffect, useState } from "react";
 import { TagI } from "../interface/Tag";
-import { fetchTags } from "../utils/fetchTags";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 interface ResourceDetailProps {
@@ -46,6 +44,7 @@ interface ResourceDetailProps {
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     activeUser: User;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    tags: TagI[];
 }
 
 export function ResourceDetail({
@@ -58,14 +57,10 @@ export function ResourceDetail({
     setResources,
     activeUser,
     setFavourites,
+    tags,
 }: ResourceDetailProps): JSX.Element {
     const { onClose } = useDisclosure();
     const toast = useCustomToast();
-    const [tags, setTags] = useState<TagI[]>([]);
-
-    useEffect(() => {
-        fetchTags(resource.resource_id).then((t) => setTags(t));
-    }, [resource.resource_id]);
 
     async function handleAddFavourite(resource_id: number, user_id: number) {
         await axios.post(baseUrl + "/favourites", {

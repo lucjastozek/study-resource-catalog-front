@@ -7,6 +7,7 @@ import { tagScheme } from "../utils/tagScheme";
 import { User } from "../interface/User";
 import { filterContent } from "../utils/filterContent";
 import { useState } from "react";
+import { TagI } from "../interface/Tag";
 
 interface ToStudyProps {
     favourites: Resource[];
@@ -21,6 +22,7 @@ interface ToStudyProps {
     selectedResource: Resource | undefined;
     activeUser: User;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    resourceTags: TagI[];
 }
 
 export const ToStudy = ({
@@ -32,6 +34,7 @@ export const ToStudy = ({
     selectedResource,
     activeUser,
     setFavourites,
+    resourceTags,
 }: ToStudyProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
     const filteredFavourites = filterContent(
@@ -69,6 +72,10 @@ export const ToStudy = ({
                     setResources={setResources}
                     activeUser={activeUser}
                     setFavourites={setFavourites}
+                    tags={resourceTags.filter(
+                        (tag) =>
+                            tag.resource_id === selectedResource.resource_id
+                    )}
                 />
             ) : (
                 <></>
@@ -99,6 +106,10 @@ export const ToStudy = ({
                             setResources={setResources}
                             setFavourites={setFavourites}
                             activeUser={activeUser}
+                            tags={resourceTags.filter(
+                                (tag) =>
+                                    tag.resource_id === favourite.resource_id
+                            )}
                         />
                     ))}
             </Grid>

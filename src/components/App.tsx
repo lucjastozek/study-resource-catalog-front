@@ -37,6 +37,8 @@ import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
 import { AboutUs } from "./AboutUs";
 import { Footer } from "./Footer";
+import { fetchTags } from "../utils/fetchTags";
+import { TagI } from "../interface/Tag";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -59,14 +61,17 @@ function App() {
     const [linkPreviews, setLinkPreviews] = useState<{ [key: number]: string }>(
         {}
     );
+    const [resourceTags, setResourceTags] = useState<TagI[]>([]);
     const userImage = `./${activeUser.name}-avatar.png`;
 
     useEffect(() => {
         fetchUsers().then((users) => setListedUsers(users));
         fetchResources().then((res) => setResources(res));
+        fetchTags().then((t) => setResourceTags(t));
     }, []);
 
     useEffect(() => {
+        console.log("blabla");
         for (const r of resources) {
             fetchUserName(r.user_id).then((name) => {
                 setUsernames((prev) => ({ ...prev, ...{ [r.user_id]: name } }));
@@ -229,6 +234,7 @@ function App() {
                                     linkPreviews={linkPreviews}
                                     activeUser={activeUser}
                                     setFavourites={setFavourites}
+                                    resourceTags={resourceTags}
                                 />
                             </Route>
                             <Route path="/home">
@@ -241,6 +247,7 @@ function App() {
                                     linkPreviews={linkPreviews}
                                     activeUser={activeUser}
                                     setFavourites={setFavourites}
+                                    resourceTags={resourceTags}
                                 />
                             </Route>
                             <Route path="/users">
@@ -259,6 +266,7 @@ function App() {
                                     selectedResource={selectedResource}
                                     activeUser={activeUser}
                                     setFavourites={setFavourites}
+                                    resourceTags={resourceTags}
                                 />
                             </Route>
                             <Route path="/submit">

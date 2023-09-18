@@ -1,6 +1,8 @@
 import { ExternalLinkIcon, SearchIcon } from "@chakra-ui/icons";
 import {
+    Badge,
     Center,
+    Flex,
     Grid,
     IconButton,
     Input,
@@ -19,10 +21,13 @@ import moment from "moment";
 import { useState } from "react";
 import { Resource } from "../interface/Resource";
 import { User } from "../interface/User";
+import { colorSchemes } from "../utils/colorSchemes";
 import { filterContent } from "../utils/filterContent";
 import { tagScheme } from "../utils/tagScheme";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
+import { TagI } from "../interface/Tag";
+import { tags } from "../utils/tags";
 
 interface HomeProps {
     resources: Resource[];
@@ -39,6 +44,7 @@ interface HomeProps {
     };
     activeUser: User;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    resourceTags: TagI[];
 }
 
 export const Home = ({
@@ -50,17 +56,24 @@ export const Home = ({
     linkPreviews,
     activeUser,
     setFavourites,
+    resourceTags,
 }: HomeProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
     const filteredContent = filterContent(resources, usernames, searchInput);
     const { colorMode } = useColorMode();
-
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const placeholderColor = colorMode === "dark" ? "white" : "black";
 
     const copyLikesResources = [...filteredContent];
-    const resourcesSortedByLikes = copyLikesResources.sort(
-        (a, b) => b.likes - a.likes
-    );
+    const resourcesSortedByLikes = copyLikesResources
+        .sort((a, b) => b.likes - a.likes)
+        .filter((resource) =>
+            selectedTags.length > 0
+                ? resourceTags
+                      .filter((r) => r.resource_id === resource.resource_id)
+                      .some((r) => selectedTags.includes(r.name))
+                : true
+        );
 
     const copyDateResources = [...filteredContent];
     const resourcesSortedByDate = copyDateResources.sort((a, b) =>
@@ -87,6 +100,26 @@ export const Home = ({
                     ></Input>
                 </InputGroup>
             </Center>
+            <Flex>
+                {tags.map((tag, index) => (
+                    <Badge
+                        colorScheme={colorSchemes[index % colorSchemes.length]}
+                        key={index}
+                        fontSize={"md"}
+                        margin={"0.5rem"}
+                        variant={
+                            selectedTags.includes(tag) ? "solid" : "outline"
+                        }
+                        borderRadius={"10"}
+                        padding={"0.5vh"}
+                        onClick={() => {
+                            setSelectedTags((prev) => [...prev, tag]);
+                        }}
+                    >
+                        {tag}
+                    </Badge>
+                ))}
+            </Flex>
 
             {selectedResource !== undefined ? (
                 <ResourceDetail
@@ -103,6 +136,10 @@ export const Home = ({
                     setResources={setResources}
                     activeUser={activeUser}
                     setFavourites={setFavourites}
+                    tags={resourceTags.filter(
+                        (tag) =>
+                            tag.resource_id === selectedResource.resource_id
+                    )}
                 />
             ) : (
                 <></>
@@ -125,6 +162,10 @@ export const Home = ({
                             setResources={setResources}
                             setFavourites={setFavourites}
                             activeUser={activeUser}
+                            tags={resourceTags.filter(
+                                (tag) =>
+                                    tag.resource_id === resource.resource_id
+                            )}
                         />
                     ))}
             </Grid>

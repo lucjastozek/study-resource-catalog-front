@@ -23,9 +23,7 @@ import { handleDislike, handleLike } from "../utils/likeHandlers";
 import { User } from "../interface/User";
 import { handleDeleteFavourites } from "../utils/deleteHandlers";
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { TagI } from "../interface/Tag";
-import { fetchTags } from "../utils/fetchTags";
 import { colorSchemes } from "../utils/colorSchemes";
 
 interface ResourceCardProps {
@@ -40,6 +38,7 @@ interface ResourceCardProps {
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
     activeUser: User;
+    tags: TagI[];
 }
 
 export function ResourceCard({
@@ -50,13 +49,9 @@ export function ResourceCard({
     setResources,
     setFavourites,
     activeUser,
+    tags,
 }: ResourceCardProps): JSX.Element {
     const location = useLocation();
-    const [tags, setTags] = useState<TagI[]>([]);
-
-    useEffect(() => {
-        fetchTags(resource.resource_id).then((t) => setTags(t));
-    }, [resource.resource_id]);
 
     return (
         <Card key={resource.resource_id}>
@@ -95,19 +90,20 @@ export function ResourceCard({
                     </Box>
                 </Flex>
                 <Flex justifyContent={"center"} alignItems={"center"}>
-                    {tags.slice(0, 3).map((tag, index) => (
-                        <Badge
-                            colorScheme={
-                                colorSchemes[index % colorSchemes.length]
-                            }
-                            key={index}
-                            fontSize={"md"}
-                            margin={"0.5rem"}
-                            variant={"solid"}
-                        >
-                            {tag.name}
-                        </Badge>
-                    ))}
+                    {tags !== undefined &&
+                        tags.slice(0, 3).map((tag, index) => (
+                            <Badge
+                                colorScheme={
+                                    colorSchemes[index % colorSchemes.length]
+                                }
+                                key={index}
+                                fontSize={"md"}
+                                margin={"0.5rem"}
+                                variant={"solid"}
+                            >
+                                {tag.name}
+                            </Badge>
+                        ))}
                 </Flex>
                 <a href={resource.url} target="_blank" rel="noreferrer">
                     {resource.resource_id in linkPreviews ? (
