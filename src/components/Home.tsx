@@ -16,18 +16,19 @@ import {
     Tooltip,
     Tr,
     useColorMode,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import moment from "moment";
 import { useState } from "react";
 import { Resource } from "../interface/Resource";
+import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
 import { colorSchemes } from "../utils/colorSchemes";
 import { filterContent } from "../utils/filterContent";
 import { tagScheme } from "../utils/tagScheme";
+import { tags } from "../utils/tags";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
-import { TagI } from "../interface/Tag";
-import { tags } from "../utils/tags";
 
 interface HomeProps {
     resources: Resource[];
@@ -71,18 +72,39 @@ export const Home = ({
             selectedTags.length > 0
                 ? resourceTags
                       .filter((r) => r.resource_id === resource.resource_id)
-                      .some((r) => selectedTags.includes(r.name))
+                      .every((r) => selectedTags.includes(r.name))
                 : true
         );
 
     const copyDateResources = [...filteredContent];
-    const resourcesSortedByDate = copyDateResources.sort((a, b) =>
-        moment(b.creation_date).diff(moment(a.creation_date))
-    );
+    const resourcesSortedByDate = copyDateResources
+        .sort((a, b) => moment(b.creation_date).diff(moment(a.creation_date)))
+        .filter((resource) =>
+            selectedTags.length > 0
+                ? resourceTags
+                      .filter((r) => r.resource_id === resource.resource_id)
+                      .every((r) => selectedTags.includes(r.name))
+                : true
+        );
+
+    const handleSelectTags = (tag: string) => {
+        if (selectedTags.includes(tag)) {
+            const newTags = selectedTags.filter((t) => t !== tag);
+            setSelectedTags(newTags);
+        } else {
+            setSelectedTags((prev) => [...prev, tag]);
+        }
+    };
+
+    const [isLargerThan800] = useMediaQuery("(min-width: 800px)");
+
+    const slicedArray = isLargerThan800
+        ? resourcesSortedByLikes.slice(0, 5)
+        : resourcesSortedByDate;
 
     return (
         <>
-            <Center>
+            <Center marginInline={"auto"}>
                 <InputGroup>
                     <InputLeftElement
                         pointerEvents="none"
@@ -93,14 +115,17 @@ export const Home = ({
                     <Input
                         mt={3}
                         onChange={(e) => setSearchInput(e.target.value)}
-                        width={"20vw"}
+                        width={{ base: "100%", lg: "20vw" }}
                         value={searchInput}
                         placeholder="Find resources..."
                         _placeholder={{ color: placeholderColor }}
                     ></Input>
                 </InputGroup>
             </Center>
-            <Flex>
+            <Flex
+                justifyContent={"center"}
+                flexWrap={{ base: "wrap", lg: "nowrap" }}
+            >
                 {tags.map((tag, index) => (
                     <Badge
                         colorScheme={colorSchemes[index % colorSchemes.length]}
@@ -110,15 +135,23 @@ export const Home = ({
                         variant={
                             selectedTags.includes(tag) ? "solid" : "outline"
                         }
-                        borderRadius={"10"}
+                        borderRadius={"5"}
+                        textAlign={"center"}
                         padding={"0.5vh"}
-                        onClick={() => {
-                            setSelectedTags((prev) => [...prev, tag]);
-                        }}
+                        onClick={() => handleSelectTags(tag)}
                     >
                         {tag}
                     </Badge>
                 ))}
+                <Badge
+                    fontSize={"md"}
+                    margin={"0.5rem"}
+                    padding={"0.5vh"}
+                    borderRadius={"5"}
+                    onClick={() => setSelectedTags([])}
+                >
+                    Clear Tags
+                </Badge>
             </Flex>
 
             {selectedResource !== undefined ? (
@@ -150,72 +183,77 @@ export const Home = ({
                 gap={4}
                 margin={4}
             >
-                {resourcesSortedByLikes
-                    .slice(0, 5)
-                    .map((resource: Resource) => (
-                        <ResourceCard
-                            key={resource.resource_id}
-                            resource={resource}
-                            setSelectedResource={setSelectedResource}
-                            usernames={usernames}
-                            linkPreviews={linkPreviews}
-                            setResources={setResources}
-                            setFavourites={setFavourites}
-                            activeUser={activeUser}
-                            tags={resourceTags.filter(
-                                (tag) =>
-                                    tag.resource_id === resource.resource_id
-                            )}
-                        />
-                    ))}
+                {slicedArray.map((resource: Resource) => (
+                    <ResourceCard
+                        key={resource.resource_id}
+                        resource={resource}
+                        setSelectedResource={setSelectedResource}
+                        usernames={usernames}
+                        linkPreviews={linkPreviews}
+                        setResources={setResources}
+                        setFavourites={setFavourites}
+                        activeUser={activeUser}
+                        tags={resourceTags.filter(
+                            (tag) => tag.resource_id === resource.resource_id
+                        )}
+                    />
+                ))}
             </Grid>
-            <Table width={"90vw"} variant={"striped"}>
-                <Thead>
-                    <Tr>
-                        <Th>Name</Th>
-                        <Th>Author</Th>
-                        <Th>Reccomendation Type</Th>
-                        <Th>Link</Th>
-                        <Th>Likes</Th>
-                        <Th>Dislikes</Th>
-                        <Th>Date Added</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {resourcesSortedByDate.map((resource) => (
-                        <Tr
-                            key={resource.resource_id}
-                            onClick={() => {
-                                setSelectedResource(resource);
-                            }}
-                        >
-                            <Td>{resource.name}</Td>
-                            <Td>{resource.author}</Td>
-                            <Td textTransform={"capitalize"}>
-                                {resource.recommendation_type}
-                            </Td>
-                            <Td>
-                                <Tooltip label={resource.url}>
-                                    <a href={resource.url} target="blank">
-                                        <IconButton
-                                            colorScheme="blue"
-                                            aria-label="Search database"
-                                            icon={<ExternalLinkIcon />}
-                                        />
-                                    </a>
-                                </Tooltip>
-                            </Td>
-                            <Td>{resource.likes}</Td>
-                            <Td>{resource.dislikes}</Td>
-                            <Td>
-                                {moment(resource.creation_date).format(
-                                    "DD/MM/yyyy"
-                                )}
-                            </Td>
+
+            {isLargerThan800 && (
+                <Table
+                    margin={"auto"}
+                    size={{ base: "sm", lg: "md" }}
+                    width={{ base: "auto", lg: "90vw" }}
+                    variant={"striped"}
+                >
+                    <Thead>
+                        <Tr>
+                            <Th>Name</Th>
+                            <Th>Author</Th>
+                            <Th>Reccomendation Type</Th>
+                            <Th>Link</Th>
+                            <Th>Likes</Th>
+                            <Th>Dislikes</Th>
+                            <Th>Date Added</Th>
                         </Tr>
-                    ))}
-                </Tbody>
-            </Table>
+                    </Thead>
+                    <Tbody>
+                        {resourcesSortedByDate.map((resource) => (
+                            <Tr
+                                key={resource.resource_id}
+                                onClick={() => {
+                                    setSelectedResource(resource);
+                                }}
+                            >
+                                <Td>{resource.name}</Td>
+                                <Td>{resource.author}</Td>
+                                <Td textTransform={"capitalize"}>
+                                    {resource.recommendation_type}
+                                </Td>
+                                <Td>
+                                    <Tooltip label={resource.url}>
+                                        <a href={resource.url} target="blank">
+                                            <IconButton
+                                                colorScheme="blue"
+                                                aria-label="Search database"
+                                                icon={<ExternalLinkIcon />}
+                                            />
+                                        </a>
+                                    </Tooltip>
+                                </Td>
+                                <Td>{resource.likes}</Td>
+                                <Td>{resource.dislikes}</Td>
+                                <Td>
+                                    {moment(resource.creation_date).format(
+                                        "DD/MM/yyyy"
+                                    )}
+                                </Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </Table>
+            )}
         </>
     );
 };

@@ -8,7 +8,6 @@ import {
     Container,
     Flex,
     HStack,
-    Text,
     Heading,
     Popover,
     PopoverArrow,
@@ -18,27 +17,27 @@ import {
     PopoverHeader,
     PopoverTrigger,
     Portal,
-    VStack,
+    Text,
     useColorMode,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Resource } from "../interface/Resource";
+import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
 import { fetchFavourites } from "../utils/fetchFavourites";
 import { fetchImage } from "../utils/fetchImage";
 import { fetchResources } from "../utils/fetchResources";
+import { fetchTags } from "../utils/fetchTags";
 import { fetchUserName } from "../utils/fetchUserName";
 import { fetchUsers } from "../utils/fetchUsers";
+import { AboutUs } from "./AboutUs";
 import "./App.css";
+import { Footer } from "./Footer";
 import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
-import { AboutUs } from "./AboutUs";
-import { Footer } from "./Footer";
-import { fetchTags } from "../utils/fetchTags";
-import { TagI } from "../interface/Tag";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -107,6 +106,7 @@ function App() {
                         justify={"space-around"}
                         alignItems={"center"}
                         paddingTop={"2vh"}
+                        flexDirection={{ base: "column", lg: "row" }}
                     >
                         <Button onClick={toggleColorMode}>
                             Toggle {colorMode === "light" ? "Dark" : "Light"}
@@ -197,9 +197,12 @@ function App() {
                 </header>
 
                 <Router>
-                    <VStack>
+                    <>
                         <nav>
-                            <HStack>
+                            <HStack
+                                justifyContent={"center"}
+                                wrap={{ base: "wrap", lg: "nowrap" }}
+                            >
                                 <Link to="/home">
                                     <Button>Home</Button>
                                 </Link>
@@ -296,7 +299,7 @@ function App() {
                                 <AboutUs />
                             </Route>
                         </Switch>
-                    </VStack>
+                    </>
                 </Router>
                 <Footer />
             </Flex>
