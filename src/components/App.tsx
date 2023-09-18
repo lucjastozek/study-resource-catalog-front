@@ -71,7 +71,6 @@ function App() {
     }, []);
 
     useEffect(() => {
-        console.log("blabla");
         for (const r of resources) {
             fetchUserName(r.user_id).then((name) => {
                 setUsernames((prev) => ({ ...prev, ...{ [r.user_id]: name } }));
@@ -127,8 +126,7 @@ function App() {
                                             // src="https://bit.ly/broken-link"
                                             name={activeUser?.name}
                                         >
-                                            {userImage !==
-                                                "./undefined-avatar.png" && (
+                                            {activeUser.user_id > 0 && (
                                                 <AvatarBadge
                                                     boxSize="1.25em"
                                                     bg="green.500"
