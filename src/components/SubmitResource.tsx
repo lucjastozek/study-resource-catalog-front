@@ -106,11 +106,23 @@ export const SubmitResource = ({
         setFormValues((prev) => ({ ...prev, ...updatedProperty }));
     };
 
+    const handleSelectTags = (tag: string) => {
+        if (selectedTags.includes(tag)) {
+            const newTags = selectedTags.filter((t) => t !== tag);
+            setSelectedTags(newTags);
+        } else {
+            setSelectedTags((prev) => [...prev, tag]);
+        }
+    };
+
     return (
         <>
             <Heading>Submit New Resource</Heading>
 
-            <Stack justifyContent={"center"}>
+            <Stack
+                justifyContent={"center"}
+                marginInline={{ base: "1rem", lg: "auto" }}
+            >
                 <Input
                     onChange={(e) =>
                         handleChangeForm(e.target.formTarget, e.target.value)
@@ -158,9 +170,10 @@ export const SubmitResource = ({
                 <Card
                     background={"#00000000"}
                     border={"1px solid #40444e"}
-                    width={"40vw"}
+                    width={{ base: "auto", lg: "20vw" }}
                     direction={"row"}
                     align={"center"}
+                    textAlign={"center"}
                 >
                     <CardBody>
                         <Text>Tags</Text>
@@ -177,9 +190,7 @@ export const SubmitResource = ({
                                         ? "solid"
                                         : "outline"
                                 }
-                                onClick={() =>
-                                    setSelectedTags((prev) => [...prev, tag])
-                                }
+                                onClick={() => handleSelectTags(tag)}
                             >
                                 {tag}
                             </Badge>

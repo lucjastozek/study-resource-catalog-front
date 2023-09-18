@@ -18,6 +18,7 @@ import {
     PopoverTrigger,
     Portal,
     Text,
+    VStack,
     useColorMode,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -197,7 +198,7 @@ function App() {
                 </header>
 
                 <Router>
-                    <>
+                    <VStack>
                         <nav>
                             <HStack
                                 justifyContent={"center"}
@@ -299,7 +300,7 @@ function App() {
                                 <AboutUs />
                             </Route>
                         </Switch>
-                    </>
+                    </VStack>
                 </Router>
                 <Footer />
             </Flex>

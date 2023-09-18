@@ -1,21 +1,27 @@
-import { Avatar, Center, Link, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Box, Center, Link, Stack, Text } from "@chakra-ui/react";
 
 export function AboutUs() {
     return (
-        <Center h="20vh" mt="10">
-            <div style={{ textAlign: "center" }}>
-                <Text fontSize="3xl" mt="20" mb="8">
+        <Center h={{ base: "80vw", lg: "20vh" }} mt={{ base: 20, lg: 10 }}>
+            <Box textAlign="center">
+                <Text fontSize={{ base: "xl", lg: "3xl" }} mt="20" mb="8">
                     We are Academy Cohort 7 C2 Group.
                 </Text>
                 <Center mt="5">
-                    <Stack spacing={4} direction="row" align="center">
+                    <Stack
+                        spacing={4}
+                        direction={{ base: "column", lg: "row" }}
+                        align="center"
+                    >
                         <Avatar name="L" size="lg" src="./Lucja-avatar.png" />
                         <Link
                             href="https://github.com/lucjastozek"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Text fontSize="xl">/lucjastozek</Text>
+                            <Text fontSize={{ base: "xl", lg: "xl" }}>
+                                /lucjastozek
+                            </Text>
                         </Link>
                         <Avatar name="T" size="lg" src="./Tom-avatar.png" />
                         <Link
@@ -23,7 +29,9 @@ export function AboutUs() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Text fontSize="xl">/TomOwen93</Text>
+                            <Text fontSize={{ base: "xl", lg: "xl" }}>
+                                /TomOwen93
+                            </Text>
                         </Link>
                         <Avatar name="D" size="lg" src="./Dani-avatar.png" />
                         <Link
@@ -31,14 +39,20 @@ export function AboutUs() {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <Text fontSize="xl">/danivoro</Text>
+                            <Text fontSize={{ base: "xl", lg: "xl" }}>
+                                /danivoro
+                            </Text>
                         </Link>
                     </Stack>
                 </Center>
-                <Text fontSize="2xl" mt="10" mb="10">
+                <Text
+                    fontSize={{ base: "xl", lg: "2xl" }}
+                    mt="10"
+                    mb={{ base: 20, lg: 10 }}
+                >
                     This is our final week project.
                 </Text>
-            </div>
+            </Box>
         </Center>
     );
 }
