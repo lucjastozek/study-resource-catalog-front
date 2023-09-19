@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
     Avatar,
     Badge,
@@ -19,18 +20,17 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import { Resource } from "../interface/Resource";
-import { formatContentType } from "../utils/formatContentType";
+import axios from "axios";
 import moment from "moment";
 import { baseUrl } from "../baseUrl";
-import axios from "axios";
-import { User } from "../interface/User";
-import useCustomToast from "./useCustomToast";
-import { fetchFavourites } from "../utils/fetchFavourites";
-import { handleDeleteResource } from "../utils/deleteHandlers";
-import { colorSchemes } from "../utils/colorSchemes";
+import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { User } from "../interface/User";
+import { colorScheme } from "../utils/colorSchemes";
+import { handleDeleteResource } from "../utils/deleteHandlers";
+import { fetchFavourites } from "../utils/fetchFavourites";
+import { formatContentType } from "../utils/formatContentType";
+import useCustomToast from "./useCustomToast";
 
 interface ResourceDetailProps {
     isOpen: boolean;
@@ -110,7 +110,9 @@ export function ResourceDetail({
                         {tags.map((tag, index) => (
                             <Badge
                                 colorScheme={
-                                    colorSchemes[index % colorSchemes.length]
+                                    colorScheme[
+                                        tag.name as keyof typeof colorScheme
+                                    ]
                                 }
                                 key={index}
                                 fontSize={{ base: "xs", lg: "sm" }}
@@ -227,11 +229,13 @@ export function ResourceDetail({
                         <Button
                             colorScheme="red"
                             onClick={(e) => {
+                                onClose();
                                 handleDeleteResource(
                                     resource.resource_id,
                                     setResources
                                 );
                                 e.stopPropagation();
+                                setSelectedResource(undefined);
                             }}
                             size={"sm"}
                             marginLeft={"auto"}

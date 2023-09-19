@@ -1,3 +1,4 @@
+import { SearchIcon } from "@chakra-ui/icons";
 import {
     Badge,
     Center,
@@ -14,13 +15,12 @@ import { useState } from "react";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
-import { colorSchemes } from "../utils/colorSchemes";
 import { filterContent } from "../utils/filterContent";
 import { tagScheme } from "../utils/tagScheme";
 import { tags } from "../utils/tags";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
-import { SearchIcon } from "@chakra-ui/icons";
+import { colorScheme } from "../utils/colorSchemes";
 
 interface ToStudyProps {
     favourites: Resource[];
@@ -99,7 +99,9 @@ export const ToStudy = ({
             <Flex justifyContent={"center"} flexWrap={"wrap"}>
                 {tags.map((tag, index) => (
                     <Badge
-                        colorScheme={colorSchemes[index % colorSchemes.length]}
+                        colorScheme={
+                            colorScheme[tag as keyof typeof colorScheme]
+                        }
                         key={index}
                         fontSize={{ base: "xs", lg: "sm" }}
                         size={{ base: "xs", lg: "sm" }}
