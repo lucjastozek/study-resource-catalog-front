@@ -11,10 +11,11 @@ function useCustomToast() {
             | "error"
             | "loading"
             | undefined,
-        description: string
+        description: string,
+        pos = "top"
     ) => {
         const toastOptions = {
-            position: "top" as ToastPosition,
+            position: pos as ToastPosition,
             title: `${status
                 ?.charAt(0)
                 .toUpperCase()

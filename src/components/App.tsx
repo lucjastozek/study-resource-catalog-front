@@ -43,6 +43,10 @@ import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+// import { socket } from "../socket";
+import useCustomToast from "./useCustomToast";
+import { baseUrl } from "../baseUrl";
+import { io } from "socket.io-client";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -67,6 +71,7 @@ function App() {
     );
     const [resourceTags, setResourceTags] = useState<TagI[]>([]);
     const [isLargeScreen] = useMediaQuery("(min-width: 992px)");
+    const showToast = useCustomToast();
 
     const userImage =
         //Only the testing users will have images sine we are not go to implement the profile image loading feature.
@@ -79,6 +84,34 @@ function App() {
         fetchResources().then((res) => setResources(res));
         fetchTags().then((t) => setResourceTags(t));
     }, []);
+
+    useEffect(() => {
+        const newSocket = io(baseUrl);
+        newSocket.connect();
+        newSocket.on("resource", (received) => {
+            fetchResources().then((res) => setResources(res));
+            showToast(
+                "info",
+                `CHECK OUT THIS SICK NEW RESOURCE: ${received.name}`,
+                "top-left"
+            );
+        });
+
+        newSocket.on("user", (received) => {
+            fetchUsers().then((users) => setListedUsers(users));
+            showToast(
+                "success",
+                `Welcome our new user - ${received.name}!!!`,
+                "top-left"
+            );
+        });
+
+        function cleanup() {
+            newSocket.disconnect();
+        }
+
+        return cleanup;
+    }, [showToast]);
 
     useEffect(() => {
         for (const r of resources) {
