@@ -104,6 +104,7 @@ export function ResourceDetail({
                         justifyContent={"center"}
                         alignItems={"center"}
                         marginBottom={"2vh"}
+                        marginTop={"2vh"}
                         flexWrap={"wrap"}
                     >
                         {tags.map((tag, index) => (
@@ -114,14 +115,12 @@ export function ResourceDetail({
                                 key={index}
                                 fontSize={{ base: "xs", lg: "sm" }}
                                 size={{ base: "xs", lg: "sm" }}
-                                margin={"0.5rem"}
+                                margin={{ base: "0.25rem", lg: "0.5rem" }}
                                 variant={"solid"}
-                                style={{
-                                    paddingTop: "1vh",
-                                    paddingBottom: "0.5vh",
-                                    paddingLeft: "1.5vh",
-                                    paddingRight: "1.5vh",
-                                }}
+                                paddingTop={{ base: "0.5vh", lg: "0.75vh" }}
+                                paddingBottom={{ base: "0.5vh", lg: "0.75vh" }}
+                                paddingInline={{ base: "1vh", lg: "1.5vh" }}
+                                borderRadius={"9"}
                             >
                                 {tag.name}
                             </Badge>

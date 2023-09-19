@@ -122,10 +122,7 @@ export const Home = ({
                     ></Input>
                 </InputGroup>
             </Center>
-            <Flex
-                justifyContent={"center"}
-                flexWrap={{ base: "wrap", lg: "nowrap" }}
-            >
+            <Flex justifyContent={"center"} flexWrap={"wrap"}>
                 {tags.map((tag, index) => (
                     <Badge
                         colorScheme={colorSchemes[index % colorSchemes.length]}
@@ -138,11 +135,10 @@ export const Home = ({
                         }
                         borderRadius={"9"}
                         textAlign={"center"}
-                        padding={"0.5vh"}
                         onClick={() => handleSelectTags(tag)}
                         style={{
                             paddingTop: "1vh",
-                            paddingBottom: "0.5vh",
+                            paddingBottom: "1vh",
                             paddingLeft: "1.5vh",
                             paddingRight: "1.5vh",
                         }}
@@ -159,7 +155,7 @@ export const Home = ({
                     onClick={() => setSelectedTags([])}
                     style={{
                         paddingTop: "1vh",
-                        paddingBottom: "0.5vh",
+                        paddingBottom: "1vh",
                         paddingLeft: "1.5vh",
                         paddingRight: "1.5vh",
                     }}

@@ -7,8 +7,10 @@ import {
     Button,
     Container,
     Flex,
+    Grid,
     HStack,
     Heading,
+    IconButton,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -20,6 +22,7 @@ import {
     Text,
     VStack,
     useColorMode,
+    useMediaQuery,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link, Route, BrowserRouter as Router, Switch } from "react-router-dom";
@@ -39,6 +42,7 @@ import { Home } from "./Home";
 import { SubmitResource } from "./SubmitResource";
 import { ToStudy } from "./ToStudy";
 import { UserLogin } from "./UserLogin";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 function App() {
     const initialUser = JSON.stringify({
@@ -62,6 +66,7 @@ function App() {
         {}
     );
     const [resourceTags, setResourceTags] = useState<TagI[]>([]);
+    const [isLargeScreen] = useMediaQuery("(min-width: 992px)");
 
     const userImage =
         //Only the testing users will have images sine we are not go to implement the profile image loading feature.
@@ -113,93 +118,112 @@ function App() {
                         paddingTop={"2vh"}
                         flexDirection={{ base: "column", lg: "row" }}
                     >
-                        <Button
-                            onClick={toggleColorMode}
-                            size={{ base: "sm", lg: "md" }}
+                        <Grid
+                            templateAreas={
+                                isLargeScreen
+                                    ? `"empty heading avatar"`
+                                    : `"heading heading avatar"`
+                            }
+                            width={"100vw"}
                         >
-                            Toggle {colorMode === "light" ? "Dark" : "Light"}
-                        </Button>
-                        <Heading textAlign={"center"} mb={5} mt={5}>
-                            Study Resources Catalog
-                        </Heading>
-                        <Popover>
-                            <Box>
-                                <PopoverTrigger>
-                                    <Box textAlign="center" mb={"4"}>
-                                        <Avatar
-                                            src={userImage}
-                                            // src="https://bit.ly/broken-link"
-                                            name={activeUser?.name}
-                                        >
-                                            {activeUser.user_id > 0 && (
-                                                <AvatarBadge
-                                                    boxSize="1.25em"
-                                                    bg="green.500"
-                                                />
-                                            )}
-                                        </Avatar>
+                            {isLargeScreen && <Text gridArea={"empty"}></Text>}
 
-                                        {userImage !==
-                                            "./undefined-avatar.png" && (
-                                            <Text mt={2}>
-                                                Logged in as {activeUser?.name}{" "}
-                                            </Text>
-                                        )}
-                                        {userImage ===
-                                            "./undefined-avatar.png" && (
-                                            <Text mt={2}>
-                                                Login to submit{" "}
-                                                {activeUser?.name}{" "}
-                                            </Text>
-                                        )}
-                                    </Box>
-                                </PopoverTrigger>
-                            </Box>
-                            <Portal>
-                                {userImage !== "./undefined-avatar.png" && (
-                                    <PopoverContent>
-                                        <PopoverArrow />
-                                        <PopoverHeader>
-                                            Do you want to sign out?
-                                        </PopoverHeader>
-                                        <PopoverCloseButton />
-                                        <PopoverBody>
-                                            <Button
-                                                colorScheme="blue"
-                                                onClick={() =>
-                                                    setActiveUser(
-                                                        JSON.parse(initialUser)
-                                                    )
-                                                }
+                            <Heading
+                                gridArea={"heading"}
+                                textAlign={"center"}
+                                mb={5}
+                                mt={5}
+                                fontSize={{ base: "1.5rem", lg: "4rem" }}
+                            >
+                                Study Resources Catalog
+                            </Heading>
+
+                            <Popover>
+                                <Box gridArea={"avatar"} margin={"auto"}>
+                                    <PopoverTrigger>
+                                        <Box textAlign="center" mb={"4"}>
+                                            <Avatar
+                                                src={userImage}
+                                                // src="https://bit.ly/broken-link"
+                                                name={activeUser?.name}
                                             >
-                                                <a href="/users">Sign Out</a>
-                                            </Button>
-                                        </PopoverBody>
-                                    </PopoverContent>
-                                )}
-                                {userImage === "./undefined-avatar.png" && (
-                                    <PopoverContent>
-                                        <PopoverArrow />
-                                        <PopoverHeader>
-                                            Do you want to sign in?
-                                        </PopoverHeader>
-                                        <PopoverCloseButton />
-                                        <PopoverBody>
-                                            <Button
-                                                colorScheme="blue"
-                                                onClick={() =>
-                                                    setActiveUser(
-                                                        JSON.parse(initialUser)
-                                                    )
-                                                }
-                                            >
-                                                <a href="/users">Sign in</a>
-                                            </Button>
-                                        </PopoverBody>
-                                    </PopoverContent>
-                                )}
-                            </Portal>
-                        </Popover>
+                                                {activeUser.user_id > 0 && (
+                                                    <AvatarBadge
+                                                        boxSize="1.25em"
+                                                        bg="green.500"
+                                                    />
+                                                )}
+                                            </Avatar>
+
+                                            {userImage !==
+                                                "./undefined-avatar.png" && (
+                                                <Text mt={2}>
+                                                    {activeUser?.name}
+                                                </Text>
+                                            )}
+                                            {userImage ===
+                                                "./undefined-avatar.png" && (
+                                                <Text mt={2}>
+                                                    Login to submit{" "}
+                                                    {activeUser?.name}{" "}
+                                                </Text>
+                                            )}
+                                        </Box>
+                                    </PopoverTrigger>
+                                </Box>
+
+                                <Portal>
+                                    {userImage !== "./undefined-avatar.png" && (
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverHeader>
+                                                Do you want to sign out?
+                                            </PopoverHeader>
+                                            <PopoverCloseButton />
+                                            <PopoverBody>
+                                                <Button
+                                                    colorScheme="blue"
+                                                    onClick={() =>
+                                                        setActiveUser(
+                                                            JSON.parse(
+                                                                initialUser
+                                                            )
+                                                        )
+                                                    }
+                                                >
+                                                    <a href="/users">
+                                                        Sign Out
+                                                    </a>
+                                                </Button>
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    )}
+                                    {userImage === "./undefined-avatar.png" && (
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverHeader>
+                                                Do you want to sign in?
+                                            </PopoverHeader>
+                                            <PopoverCloseButton />
+                                            <PopoverBody>
+                                                <Button
+                                                    colorScheme="blue"
+                                                    onClick={() =>
+                                                        setActiveUser(
+                                                            JSON.parse(
+                                                                initialUser
+                                                            )
+                                                        )
+                                                    }
+                                                >
+                                                    <a href="/users">Sign in</a>
+                                                </Button>
+                                            </PopoverBody>
+                                        </PopoverContent>
+                                    )}
+                                </Portal>
+                            </Popover>
+                        </Grid>
                     </Flex>
                 </header>
 
@@ -241,6 +265,18 @@ function App() {
                                         About Us
                                     </Button>
                                 </Link>
+                                <IconButton
+                                    icon={
+                                        colorMode === "light" ? (
+                                            <MoonIcon />
+                                        ) : (
+                                            <SunIcon />
+                                        )
+                                    }
+                                    onClick={toggleColorMode}
+                                    size={{ base: "sm", lg: "md" }}
+                                    aria-label="toggle color mode button"
+                                />
                             </HStack>
                         </nav>
                         <Switch>

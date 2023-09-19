@@ -170,7 +170,7 @@ export const SubmitResource = ({
                 <Card
                     background={"#00000000"}
                     border={"1px solid #40444e"}
-                    width={{ base: "auto", lg: "20vw" }}
+                    width={{ base: "auto", lg: "40vw" }}
                     direction={"row"}
                     align={"center"}
                     textAlign={"center"}
@@ -223,7 +223,7 @@ export const SubmitResource = ({
                 </InputGroup>
 
                 <InputGroup>
-                    <InputLeftAddon w={"9rem"}>Build Week </InputLeftAddon>
+                    <InputLeftAddon>Build Week </InputLeftAddon>
 
                     <NumberInput
                         onChange={(value) =>
@@ -233,6 +233,7 @@ export const SubmitResource = ({
                         defaultValue={1}
                         min={1}
                         max={15}
+                        width={"100%"}
                     >
                         <NumberInputField />
                         <NumberInputStepper>

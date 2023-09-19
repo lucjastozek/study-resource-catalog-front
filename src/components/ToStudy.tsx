@@ -96,10 +96,7 @@ export const ToStudy = ({
                     ></Input>
                 </InputGroup>
             </Center>
-            <Flex
-                justifyContent={"center"}
-                flexWrap={{ base: "wrap", lg: "nowrap" }}
-            >
+            <Flex justifyContent={"center"} flexWrap={"wrap"}>
                 {tags.map((tag, index) => (
                     <Badge
                         colorScheme={colorSchemes[index % colorSchemes.length]}
@@ -116,7 +113,7 @@ export const ToStudy = ({
                         onClick={() => handleSelectTags(tag)}
                         style={{
                             paddingTop: "1vh",
-                            paddingBottom: "0.5vh",
+                            paddingBottom: "1vh",
                             paddingLeft: "1.5vh",
                             paddingRight: "1.5vh",
                         }}
@@ -127,7 +124,12 @@ export const ToStudy = ({
                 <Badge
                     fontSize={{ base: "xs", lg: "md" }}
                     margin={{ base: "0.2rem", lg: "0.5rem" }}
-                    padding={"0.5vh"}
+                    style={{
+                        paddingTop: "1vh",
+                        paddingBottom: "1vh",
+                        paddingLeft: "1.5vh",
+                        paddingRight: "1.5vh",
+                    }}
                     borderRadius={"5"}
                     size={{ base: "xs", lg: "md" }}
                     onClick={() => setSelectedTags([])}
@@ -161,12 +163,12 @@ export const ToStudy = ({
             )}
             <Grid
                 templateColumns={{
-                    base: `repeat(${Math.ceil(favourites.length / 5)}, 1fr)`,
-                    md: "repeat(5, 1fr)",
+                    base: `1fr`,
+                    lg: "repeat(5, 1fr)",
                 }}
                 templateRows={{
-                    base: "repeat(5, 1fr)",
-                    md: `repeat(${Math.ceil(favourites.length / 5)}, 1fr)`,
+                    base: `repeat(${Math.ceil(favourites.length)}, 1fr)`,
+                    lg: `repeat(${Math.ceil(favourites.length / 5)}, 1fr)`,
                 }}
                 gap={4}
                 margin={4}
