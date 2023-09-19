@@ -17,14 +17,14 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
+import { useLocation } from "react-router-dom";
 import { Resource } from "../interface/Resource";
-import { tagScheme } from "../utils/tagScheme";
-import { handleDislike, handleLike } from "../utils/likeHandlers";
+import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
 import { handleDeleteFavourites } from "../utils/deleteHandlers";
-import { useLocation } from "react-router-dom";
-import { TagI } from "../interface/Tag";
-import { colorSchemes } from "../utils/colorSchemes";
+import { handleDislike, handleLike } from "../utils/likeHandlers";
+import { tagScheme } from "../utils/tagScheme";
+import { colorScheme } from "../utils/colorSchemes";
 
 interface ResourceCardProps {
     resource: Resource;
@@ -100,7 +100,9 @@ export function ResourceCard({
                         tags.slice(0, 3).map((tag, index) => (
                             <Badge
                                 colorScheme={
-                                    colorSchemes[index % colorSchemes.length]
+                                    colorScheme[
+                                        tag.name as keyof typeof colorScheme
+                                    ]
                                 }
                                 key={index}
                                 fontSize={{ base: "xs", lg: "sm" }}
@@ -148,8 +150,14 @@ export function ResourceCard({
             >
                 <Text noOfLines={4}>{resource.description}</Text>
             </CardBody>
-            <CardFooter alignItems={"end"} justify={"center"}>
-                <VStack>
+            <CardFooter
+                pb={"0"}
+                pr={"0"}
+                pl={0}
+                alignItems={"end"}
+                justify={"center"}
+            >
+                <VStack w={"100vw"}>
                     <HStack>
                         <Tag
                             cursor={"pointer"}
@@ -165,9 +173,8 @@ export function ResourceCard({
                             colorScheme="green"
                         >
                             {" "}
-                            Likes:{" "}
+                            {resource.likes} Likes 👍
                         </Tag>{" "}
-                        <Text>{resource.likes}</Text>
                         <Tag
                             cursor={"pointer"}
                             onClick={() =>
@@ -182,14 +189,9 @@ export function ResourceCard({
                             colorScheme="red"
                         >
                             {" "}
-                            Dislikes:
+                            {resource.dislikes} Dislikes 👎
                         </Tag>{" "}
-                        <Text>{resource.dislikes}</Text>
                     </HStack>
-                    <Text>
-                        Submitted:{" "}
-                        {moment(resource.creation_date).format("DD/MM/yyyy")}
-                    </Text>
 
                     {location.pathname === "/study" && (
                         <Button
@@ -205,6 +207,28 @@ export function ResourceCard({
                             Remove from Favourites
                         </Button>
                     )}
+
+                    <Text
+                        mb={"auto"}
+                        mt={"1rem"}
+                        ml={"auto"}
+                        pr={"1rem"}
+                        as={"i"}
+                    >
+                        Submitted{" "}
+                        {moment().diff(
+                            moment(resource.creation_date),
+                            "days"
+                        ) === 0
+                            ? `${moment().diff(
+                                  moment(resource.creation_date),
+                                  "hours"
+                              )} hours ago`
+                            : `${moment().diff(
+                                  moment(resource.creation_date),
+                                  "days"
+                              )} days ago`}
+                    </Text>
                 </VStack>
             </CardFooter>
         </Card>

@@ -1,4 +1,9 @@
-import { ExternalLinkIcon, SearchIcon } from "@chakra-ui/icons";
+import {
+    ArrowDownIcon,
+    ArrowUpIcon,
+    ExternalLinkIcon,
+    SearchIcon,
+} from "@chakra-ui/icons";
 import {
     Badge,
     Center,
@@ -23,12 +28,13 @@ import { useState } from "react";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
-import { colorSchemes } from "../utils/colorSchemes";
+import { colorScheme } from "../utils/colorSchemes";
 import { filterContent } from "../utils/filterContent";
 import { tagScheme } from "../utils/tagScheme";
 import { tags } from "../utils/tags";
 import { ResourceCard } from "./ResourceCard";
 import { ResourceDetail } from "./ResourceDetail";
+import { handleDislike, handleLike } from "../utils/likeHandlers";
 
 interface HomeProps {
     resources: Resource[];
@@ -60,7 +66,11 @@ export const Home = ({
     resourceTags,
 }: HomeProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
-    const filteredContent = filterContent(resources, usernames, searchInput);
+    const filteredContent: Resource[] = filterContent(
+        resources,
+        usernames,
+        searchInput
+    );
     const { colorMode } = useColorMode();
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const placeholderColor = colorMode === "dark" ? "white" : "black";
@@ -125,7 +135,9 @@ export const Home = ({
             <Flex justifyContent={"center"} flexWrap={"wrap"}>
                 {tags.map((tag, index) => (
                     <Badge
-                        colorScheme={colorSchemes[index % colorSchemes.length]}
+                        colorScheme={
+                            colorScheme[tag as keyof typeof colorScheme]
+                        }
                         key={index}
                         size={{ base: "xs", lg: "sm" }}
                         fontSize={{ base: "xs", lg: "sm" }}
@@ -213,35 +225,43 @@ export const Home = ({
             {isLargeScreen && (
                 <Table
                     margin={"auto"}
-                    size={{ base: "sm", lg: "md" }}
-                    width={{ base: "auto", lg: "90vw" }}
+                    size={{ base: "sm", lg: "ms" }}
+                    width={{ base: "auto", lg: "80vw" }}
                     variant={"striped"}
                 >
                     <Thead>
-                        <Tr>
-                            <Th>Name</Th>
-                            <Th>Author</Th>
-                            <Th>Reccomendation Type</Th>
-                            <Th>Link</Th>
-                            <Th>Likes</Th>
-                            <Th>Dislikes</Th>
-                            <Th>Date Added</Th>
+                        <Tr textAlign={"center"}>
+                            <Th textAlign={"center"}>Name</Th>
+                            <Th textAlign={"center"}>Author</Th>
+                            <Th textAlign={"center"}>Submitted By</Th>
+                            <Th textAlign={"center"}>Reccomendation Type</Th>
+                            <Th textAlign={"center"}>Link</Th>
+                            <Th textAlign={"center"}>Likes</Th>
+                            <Th textAlign={"center"}>Dislikes</Th>
+                            <Th textAlign={"center"}>Date Added</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
                         {resourcesSortedByDate.map((resource) => (
                             <Tr
+                                textAlign={"left"}
                                 key={resource.resource_id}
                                 onClick={() => {
                                     setSelectedResource(resource);
                                 }}
                             >
-                                <Td>{resource.name}</Td>
-                                <Td>{resource.author}</Td>
-                                <Td textTransform={"capitalize"}>
+                                <Td textAlign={"left"}>{resource.name}</Td>
+                                <Td textAlign={"left"}>{resource.author}</Td>
+                                <Td textAlign={"left"}>
+                                    {usernames[resource.user_id]}
+                                </Td>
+                                <Td
+                                    textAlign={"left"}
+                                    textTransform={"capitalize"}
+                                >
                                     {resource.recommendation_type}
                                 </Td>
-                                <Td>
+                                <Td textAlign={"left"}>
                                     <Tooltip label={resource.url}>
                                         <a href={resource.url} target="blank">
                                             <IconButton
@@ -252,9 +272,51 @@ export const Home = ({
                                         </a>
                                     </Tooltip>
                                 </Td>
-                                <Td>{resource.likes}</Td>
-                                <Td>{resource.dislikes}</Td>
-                                <Td>
+                                <Td
+                                    justifyContent={"left"}
+                                    textAlign={"left"}
+                                    alignItems={"center"}
+                                >
+                                    <IconButton
+                                        variant={"ghost"}
+                                        colorScheme="green"
+                                        aria-label="add-like"
+                                        icon={<ArrowUpIcon />}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleLike(
+                                                resource.resource_id,
+                                                setResources,
+                                                setFavourites,
+                                                activeUser.user_id
+                                            );
+                                        }}
+                                    />
+                                    {resource.likes}{" "}
+                                </Td>
+                                <Td
+                                    justifyContent={"left"}
+                                    textAlign={"left"}
+                                    alignItems={"center"}
+                                >
+                                    <IconButton
+                                        variant={"ghost"}
+                                        colorScheme="red"
+                                        aria-label="add-like"
+                                        icon={<ArrowDownIcon />}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDislike(
+                                                resource.resource_id,
+                                                setResources,
+                                                setFavourites,
+                                                activeUser.user_id
+                                            );
+                                        }}
+                                    />
+                                    {resource.dislikes}
+                                </Td>
+                                <Td textAlign={"left"}>
                                     {moment(resource.creation_date).format(
                                         "DD/MM/yyyy"
                                     )}

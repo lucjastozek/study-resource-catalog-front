@@ -14,8 +14,8 @@ import {
     NumberInputStepper,
     Select,
     Stack,
-    Textarea,
     Text,
+    Textarea,
     useColorMode,
 } from "@chakra-ui/react";
 import axios, { AxiosError } from "axios";
@@ -26,7 +26,7 @@ import { Resource } from "../interface/Resource";
 import { User } from "../interface/User";
 import { SubmitForm } from "../interface/submitForm";
 import { formSchema } from "../schemas/formSchema";
-import { colorSchemes } from "../utils/colorSchemes";
+import { colorScheme } from "../utils/colorSchemes";
 import { contentTypes } from "../utils/contentTypes";
 import { fetchResources } from "../utils/fetchResources";
 import { formatContentType } from "../utils/formatContentType";
@@ -189,7 +189,7 @@ export const SubmitResource = ({
                         {tags.map((tag, index) => (
                             <Badge
                                 colorScheme={
-                                    colorSchemes[index % colorSchemes.length]
+                                    colorScheme[tag as keyof typeof colorScheme]
                                 }
                                 key={index}
                                 fontSize={{ base: "xs", lg: "sm" }}
