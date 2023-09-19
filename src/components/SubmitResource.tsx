@@ -18,7 +18,7 @@ import {
     Text,
     useColorMode,
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { z } from "zod";
 import { baseUrl } from "../baseUrl";
@@ -81,11 +81,20 @@ export const SubmitResource = ({
                 setFormValues(initialState);
                 setSelectedTags([]);
                 fetchResources().then((res) => setResources(res));
+
+                showFormToast("success", "Resource added!");
             } catch (error) {
                 if (error instanceof z.ZodError) {
                     error.errors.forEach((err) => {
                         showFormToast("error", err.message);
                     });
+                } else {
+                    if (
+                        error instanceof AxiosError &&
+                        error.response !== undefined
+                    ) {
+                        showFormToast("error", error.response.data.error);
+                    }
                 }
             }
         }

@@ -227,11 +227,11 @@ export function ResourceDetail({
                         <Button
                             colorScheme="red"
                             onClick={(e) => {
-                                e.stopPropagation();
                                 handleDeleteResource(
                                     resource.resource_id,
                                     setResources
                                 );
+                                e.stopPropagation();
                             }}
                             size={"sm"}
                             marginLeft={"auto"}
