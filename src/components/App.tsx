@@ -82,16 +82,28 @@ function App() {
 
     useEffect(() => {
         for (const r of resources) {
-            fetchUserName(r.user_id).then((name) => {
-                setUsernames((prev) => ({ ...prev, ...{ [r.user_id]: name } }));
-            });
+            fetchUserName(r.user_id)
+                .then((name) => {
+                    setUsernames((prev) => ({ ...prev, [r.user_id]: name }));
+                })
+                .catch((error) => {
+                    console.error(
+                        `Error fetching username for user_id ${r.user_id}: ${error}`
+                    );
+                });
 
-            fetchImage(r.url).then((img) => {
-                setLinkPreviews((prev) => ({
-                    ...prev,
-                    ...{ [r.resource_id]: img },
-                }));
-            });
+            fetchImage(r.url)
+                .then((img) => {
+                    setLinkPreviews((prev) => ({
+                        ...prev,
+                        [r.resource_id]: img,
+                    }));
+                })
+                .catch((error) => {
+                    console.error(
+                        `Error fetching image for resource_id ${r.resource_id}: ${error}`
+                    );
+                });
         }
     }, [resources]);
 
