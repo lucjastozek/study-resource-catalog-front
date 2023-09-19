@@ -43,10 +43,9 @@ export function ActiveUserAvatar({
                                 )}
                             </Avatar>
 
-                            {userImage !== "./undefined-avatar.png" && (
+                            {activeUser.user_id > 0 ? (
                                 <Text mt={2}>{activeUser?.name}</Text>
-                            )}
-                            {userImage === "./undefined-avatar.png" && (
+                            ) : (
                                 <Text mt={2}>
                                     Login to submit {activeUser?.name}{" "}
                                 </Text>
