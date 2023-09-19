@@ -21,10 +21,10 @@ import { useLocation } from "react-router-dom";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
+import { colorScheme } from "../utils/colorSchemes";
 import { handleDeleteFavourites } from "../utils/deleteHandlers";
 import { handleDislike, handleLike } from "../utils/likeHandlers";
 import { tagScheme } from "../utils/tagScheme";
-import { colorScheme } from "../utils/colorSchemes";
 
 interface ResourceCardProps {
     resource: Resource;
@@ -52,6 +52,10 @@ export function ResourceCard({
     tags,
 }: ResourceCardProps): JSX.Element {
     const location = useLocation();
+    const imageURL =
+        linkPreviews[resource.resource_id] === "no image found"
+            ? `https://fallback-image-api.onrender.com/?text=${resource.name}`
+            : linkPreviews[resource.resource_id];
 
     return (
         <Card key={resource.resource_id}>
@@ -121,7 +125,7 @@ export function ResourceCard({
                 <a href={resource.url} target="_blank" rel="noreferrer">
                     {resource.resource_id in linkPreviews ? (
                         <Image
-                            src={linkPreviews[resource.resource_id]}
+                            src={imageURL}
                             alt=""
                             width={"90%"}
                             aspectRatio={16 / 9}
