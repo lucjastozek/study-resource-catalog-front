@@ -1,4 +1,5 @@
-import { Avatar, Box, Center, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Center, Stack, Text } from "@chakra-ui/react";
+import { TeamMember } from "./TeamMember";
 
 export function AboutUs() {
     return (
@@ -13,36 +14,18 @@ export function AboutUs() {
                         direction={{ base: "column", lg: "row" }}
                         align="center"
                     >
-                        <Avatar name="L" size="lg" src="./Lucja-avatar.png" />
-                        <Link
-                            href="https://github.com/lucjastozek"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Text fontSize={{ base: "xl", lg: "xl" }}>
-                                /lucjastozek
-                            </Text>
-                        </Link>
-                        <Avatar name="T" size="lg" src="./Tom-avatar.png" />
-                        <Link
-                            href="https://github.com/TomOwen93"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Text fontSize={{ base: "xl", lg: "xl" }}>
-                                /TomOwen93
-                            </Text>
-                        </Link>
-                        <Avatar name="D" size="lg" src="./Dani-avatar.png" />
-                        <Link
-                            href="https://github.com/danivoro"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <Text fontSize={{ base: "xl", lg: "xl" }}>
-                                /danivoro
-                            </Text>
-                        </Link>
+                        <TeamMember
+                            name="Lucja"
+                            githubLink="https://github.com/lucjastozek"
+                        />
+                        <TeamMember
+                            name="Tom"
+                            githubLink="https://github.com/TomOwen93"
+                        />
+                        <TeamMember
+                            name="Dani"
+                            githubLink="https://github.com/danivoro"
+                        />
                     </Stack>
                 </Center>
                 <Text
