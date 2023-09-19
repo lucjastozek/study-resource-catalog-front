@@ -48,11 +48,11 @@ function App() {
     }, []);
 
     useEffect(() => {
-        const newSocket = io(baseUrl);
+        const socket = io(baseUrl);
 
-        newSocket.connect();
+        socket.connect();
 
-        newSocket.on("resource", (received) => {
+        socket.on("resource", (received) => {
             fetchResources().then((res) => setResources(res));
             showToast(
                 "info",
@@ -61,7 +61,7 @@ function App() {
             );
         });
 
-        newSocket.on("user", (received) => {
+        socket.on("user", (received) => {
             fetchUsers().then((users) => setListedUsers(users));
             showToast(
                 "success",
@@ -71,7 +71,7 @@ function App() {
         });
 
         function cleanup() {
-            newSocket.disconnect();
+            socket.disconnect();
         }
 
         return cleanup;
