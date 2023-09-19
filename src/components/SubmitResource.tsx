@@ -32,35 +32,26 @@ import { fetchResources } from "../utils/fetchResources";
 import { formatContentType } from "../utils/formatContentType";
 import { tags } from "../utils/tags";
 import useCustomToast from "./useCustomToast";
+import { initialForm } from "../utils/initialForm";
 
 interface SubmitResourceProps {
     activeUser?: User;
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
 
-export const SubmitResource = ({
+export function SubmitResource({
     activeUser,
     setResources,
-}: SubmitResourceProps): JSX.Element => {
-    const initialState: SubmitForm = {
-        author_name: "",
-        resource_name: "",
-        description: "",
-        url: "",
-        recommendation_type: null,
-        stage: 1,
-        reason: "",
-        user_id: activeUser?.user_id,
-        content_type: "video",
-    };
-    const [formValues, setFormValues] = useState<SubmitForm>(initialState);
-    const { colorMode } = useColorMode();
-
-    const showFormToast = useCustomToast();
-    const placeholderColor = colorMode === "dark" ? "white" : "black";
+}: SubmitResourceProps): JSX.Element {
+    const [formValues, setFormValues] = useState<SubmitForm>(initialForm);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-    const handleSubmit = async () => {
+    const { colorMode } = useColorMode();
+    const showFormToast = useCustomToast();
+
+    const placeholderColor = colorMode === "dark" ? "white" : "black";
+
+    async function handleSubmit() {
         if (activeUser) {
             try {
                 const userid = { user_id: activeUser.user_id };
@@ -78,7 +69,7 @@ export const SubmitResource = ({
                     });
                 }
 
-                setFormValues(initialState);
+                setFormValues(initialForm);
                 setSelectedTags([]);
                 fetchResources().then((res) => setResources(res));
 
@@ -98,31 +89,28 @@ export const SubmitResource = ({
                 }
             }
         }
-    };
+    }
 
-    const handleRecommend = (
+    function handleRecommend(
         recommendation: "recommend" | "promising" | "disrecommend"
-    ) => {
+    ) {
         const recommendValue = { recommendation_type: recommendation };
         setFormValues((prev) => ({ ...prev, ...recommendValue }));
-    };
+    }
 
-    const handleChangeForm = (
-        propertyTarget: string,
-        value: string | number
-    ) => {
+    function handleChangeForm(propertyTarget: string, value: string | number) {
         const updatedProperty = { [propertyTarget]: value };
         setFormValues((prev) => ({ ...prev, ...updatedProperty }));
-    };
+    }
 
-    const handleSelectTags = (tag: string) => {
+    function handleSelectTags(tag: string) {
         if (selectedTags.includes(tag)) {
             const newTags = selectedTags.filter((t) => t !== tag);
             setSelectedTags(newTags);
         } else {
             setSelectedTags((prev) => [...prev, tag]);
         }
-    };
+    }
 
     return (
         <>
@@ -298,4 +286,4 @@ export const SubmitResource = ({
             </Stack>
         </>
     );
-};
+}
