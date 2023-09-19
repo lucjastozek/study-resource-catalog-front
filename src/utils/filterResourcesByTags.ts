@@ -10,7 +10,7 @@ export function filterResourcesByTags(
         selectedTags.length > 0
             ? resourceTags
                   .filter((r) => r.resource_id === resource.resource_id)
-                  .every((r) => selectedTags.includes(r.name))
+                  .some((r) => selectedTags.includes(r.name))
             : true
     );
 }

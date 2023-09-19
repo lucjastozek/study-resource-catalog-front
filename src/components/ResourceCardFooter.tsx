@@ -6,11 +6,11 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
 import { useLocation } from "react-router-dom";
 import { Resource } from "../interface/Resource";
 import { User } from "../interface/User";
 import { handleDeleteFavourites } from "../utils/deleteHandlers";
+import { formatTimeSubmitted } from "../utils/formatTimeSubmitted";
 import { handleDislike, handleLike } from "../utils/likeHandlers";
 
 interface ResourceCardFooterProps {
@@ -27,6 +27,7 @@ export function ResourceCardFooter({
     activeUser,
 }: ResourceCardFooterProps): JSX.Element {
     const location = useLocation();
+    const { resource_id, creation_date, dislikes, likes } = resource;
 
     return (
         <CardFooter
@@ -42,7 +43,7 @@ export function ResourceCardFooter({
                         cursor={"pointer"}
                         onClick={() =>
                             handleLike(
-                                resource.resource_id,
+                                resource_id,
                                 setResources,
                                 setFavourites,
                                 activeUser.user_id
@@ -52,13 +53,13 @@ export function ResourceCardFooter({
                         colorScheme="green"
                     >
                         {" "}
-                        {resource.likes} Likes 👍
+                        {likes} Likes 👍
                     </Tag>{" "}
                     <Tag
                         cursor={"pointer"}
                         onClick={() =>
                             handleDislike(
-                                resource.resource_id,
+                                resource_id,
                                 setResources,
                                 setFavourites,
                                 activeUser.user_id
@@ -68,7 +69,7 @@ export function ResourceCardFooter({
                         colorScheme="red"
                     >
                         {" "}
-                        {resource.dislikes} Dislikes 👎
+                        {dislikes} Dislikes 👎
                     </Tag>{" "}
                 </HStack>
 
@@ -76,7 +77,7 @@ export function ResourceCardFooter({
                     <Button
                         onClick={() =>
                             handleDeleteFavourites(
-                                resource.resource_id,
+                                resource_id,
                                 setResources,
                                 setFavourites,
                                 activeUser.user_id
@@ -94,16 +95,7 @@ export function ResourceCardFooter({
                     pr={"1rem"}
                     as={"i"}
                 >
-                    Submitted{" "}
-                    {moment().diff(moment(resource.creation_date), "days") === 0
-                        ? `${moment().diff(
-                              moment(resource.creation_date),
-                              "hours"
-                          )} hours ago`
-                        : `${moment().diff(
-                              moment(resource.creation_date),
-                              "days"
-                          )} days ago`}
+                    Submitted {formatTimeSubmitted(creation_date)}
                 </Text>
             </VStack>
         </CardFooter>
