@@ -126,20 +126,27 @@ function App() {
                             }
                             width={"100vw"}
                         >
-                            {isLargeScreen && <Text gridArea={"empty"}></Text>}
+                            {isLargeScreen && (
+                                <Text gridArea={"empty"} width={"20vw"}></Text>
+                            )}
 
                             <Heading
                                 gridArea={"heading"}
                                 textAlign={"center"}
                                 mb={5}
                                 mt={5}
-                                fontSize={{ base: "1.5rem", lg: "4rem" }}
+                                fontSize={{ base: "1.5rem", lg: "3rem" }}
+                                margin={"auto"}
                             >
                                 Study Resources Catalog
                             </Heading>
 
                             <Popover>
-                                <Box gridArea={"avatar"} margin={"auto"}>
+                                <Box
+                                    gridArea={"avatar"}
+                                    width={"20vw"}
+                                    marginLeft={"auto"}
+                                >
                                     <PopoverTrigger>
                                         <Box textAlign="center" mb={"4"}>
                                             <Avatar
