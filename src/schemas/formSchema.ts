@@ -17,7 +17,7 @@ export const formSchema = z.object({
         .string()
         .url("Submitted url is invalid")
         .min(1, "You need to input a url")
-        .max(250, "Your description exceeds maximum characters of 250"),
+        .max(250, "Your URL exceeds maximum characters of 250"),
     stage: z
         .number()
         .min(1, "You must input a build week number")
