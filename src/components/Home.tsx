@@ -112,6 +112,12 @@ export const Home = ({
         ? resourcesSortedByLikes.slice(0, 5)
         : resourcesSortedByDate;
 
+    const imageURL =
+        linkPreviews[selectedResource?.resource_id as number] ===
+        "no image found"
+            ? `https://fallback-image-api.onrender.com/?text=${selectedResource?.name}`
+            : linkPreviews[selectedResource?.resource_id as number];
+
     return (
         <>
             <Center marginInline={"auto"}>
@@ -185,7 +191,7 @@ export const Home = ({
                             selectedResource.recommendation_type as keyof typeof tagScheme
                         ]
                     }
-                    imageLink={linkPreviews[selectedResource.resource_id]}
+                    imageLink={imageURL}
                     username={usernames[selectedResource.user_id]}
                     setSelectedResource={setSelectedResource}
                     setResources={setResources}
