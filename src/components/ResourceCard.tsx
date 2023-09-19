@@ -209,7 +209,7 @@ export function ResourceCard({
                     )}
 
                     <Text
-                        mb={"auto"}
+                        mb={"0.3rem"}
                         mt={"1rem"}
                         ml={"auto"}
                         pr={"1rem"}
