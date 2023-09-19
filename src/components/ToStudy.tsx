@@ -15,7 +15,7 @@ import { useState } from "react";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
-import { filterContent } from "../utils/filterContent";
+import { filterResourcesByKeywords } from "../utils/filterResourcesByKeywordst";
 import { tagScheme } from "../utils/tagScheme";
 import { tags } from "../utils/tags";
 import { ResourceCard } from "./ResourceCard";
@@ -51,7 +51,7 @@ export const ToStudy = ({
 }: ToStudyProps): JSX.Element => {
     const [searchInput, setSearchInput] = useState<string>("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const filteredFavourites = filterContent(
+    const filteredFavourites = filterResourcesByKeywords(
         favourites,
         usernames,
         searchInput

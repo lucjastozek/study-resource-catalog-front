@@ -1,6 +1,6 @@
 import { Resource } from "../interface/Resource";
 
-export const filterContent = (
+export const filterResourcesByKeywords = (
     resources: Resource[],
     usernames: {
         [key: number]: string;
