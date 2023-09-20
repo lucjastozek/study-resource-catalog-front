@@ -29,7 +29,7 @@ interface HomeProps {
     resourceTags: TagI[];
 }
 
-export const Home = ({
+export function Home({
     resources,
     setResources,
     selectedResource,
@@ -39,7 +39,7 @@ export const Home = ({
     activeUser,
     setFavourites,
     resourceTags,
-}: HomeProps): JSX.Element => {
+}: HomeProps): JSX.Element {
     const [searchInput, setSearchInput] = useState<string>("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -125,4 +125,4 @@ export const Home = ({
             )}
         </>
     );
-};
+}

@@ -1,4 +1,4 @@
-export const formatPathName = (path: string): string => {
+export function formatPathName(path: string): string {
     if (path.includes("-")) {
         const splitPath = path.split("-");
 
@@ -14,4 +14,4 @@ export const formatPathName = (path: string): string => {
     }
     const newPath = path.charAt(0).toUpperCase() + path.slice(1);
     return newPath;
-};
+}

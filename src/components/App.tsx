@@ -19,7 +19,7 @@ import { localUser } from "../utils/localUser";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { Navigation } from "./Navigation";
-import Routes from "./Routes";
+import { Routes } from "./Routes";
 import useCustomToast from "./useCustomToast";
 
 function App() {
@@ -32,14 +32,9 @@ function App() {
     const [usernames, setUsernames] = useState<Usernames>({});
     const [linkPreviews, setLinkPreviews] = useState<LinkPreviews>({});
     const [resourceTags, setResourceTags] = useState<TagI[]>([]);
+    const [userImage, setUserImage] = useState("https://bit.ly/broken-link");
 
     const showToast = useCustomToast();
-
-    const userImage =
-        //Only the testing users will have images since we are not going to implement the profile image loading feature.
-        activeUser.user_id < 52
-            ? `./${activeUser.name}-avatar.png`
-            : "https://bit.ly/broken-link";
 
     useEffect(() => {
         fetchUsers().then((users) => setListedUsers(users));
@@ -116,6 +111,10 @@ function App() {
                 setFavourites(fav)
             );
         }
+
+        activeUser.user_id < 52
+            ? setUserImage(`./${activeUser.name}-avatar.png`)
+            : setUserImage("");
     }, [activeUser]);
 
     return (

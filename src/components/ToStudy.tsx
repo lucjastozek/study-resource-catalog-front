@@ -28,7 +28,7 @@ interface ToStudyProps {
     resourceTags: TagI[];
 }
 
-export const ToStudy = ({
+export function ToStudy({
     favourites,
     setSelectedResource,
     usernames,
@@ -38,7 +38,7 @@ export const ToStudy = ({
     activeUser,
     setFavourites,
     resourceTags,
-}: ToStudyProps): JSX.Element => {
+}: ToStudyProps): JSX.Element {
     const [searchInput, setSearchInput] = useState<string>("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -122,4 +122,4 @@ export const ToStudy = ({
             </Grid>
         </>
     );
-};
+}

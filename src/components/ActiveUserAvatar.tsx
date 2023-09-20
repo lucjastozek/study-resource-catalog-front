@@ -34,7 +34,7 @@ export function ActiveUserAvatar({
                 <Box gridArea={"avatar"} width={"20vw"} marginLeft={"auto"}>
                     <PopoverTrigger>
                         <Box textAlign="center" mb={"4"}>
-                            <Avatar src={userImage} name={activeUser?.name}>
+                            <Avatar src={userImage} name={activeUser.name}>
                                 {activeUser.user_id > 0 && (
                                     <AvatarBadge
                                         boxSize="1.25em"
@@ -44,10 +44,10 @@ export function ActiveUserAvatar({
                             </Avatar>
 
                             {activeUser.user_id > 0 ? (
-                                <Text mt={2}>{activeUser?.name}</Text>
+                                <Text mt={2}>{activeUser.name}</Text>
                             ) : (
                                 <Text mt={2}>
-                                    Login to submit {activeUser?.name}{" "}
+                                    Login to submit {activeUser.name}{" "}
                                 </Text>
                             )}
                         </Box>

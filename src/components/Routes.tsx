@@ -25,7 +25,7 @@ interface RoutesProps {
     setActiveUser: React.Dispatch<React.SetStateAction<User>>;
 }
 
-export default function Routes({
+export function Routes({
     listedUsers,
     favourites,
     usernames,
