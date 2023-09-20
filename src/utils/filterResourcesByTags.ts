@@ -6,7 +6,6 @@ export function filterResourcesByTags(
     selectedTags: string[],
     resourceTags: TagI[]
 ): Resource[] {
-    console.log(resourceTags, resources, selectedTags);
     return resources.filter((resource) =>
         selectedTags.length > 0
             ? resourceTags
