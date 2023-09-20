@@ -1,17 +1,10 @@
 export function formatContentType(type: string): string {
-    if (type.includes("_")) {
-        const splitType = type.split("_");
+    const words = type.split("_");
+    const formattedWords: string[] = [];
 
-        const capitalisedTypeFirst =
-            splitType[0].charAt(0).toUpperCase() + splitType[0].slice(1);
-        const capitalisedTypeSecond =
-            splitType[1].charAt(0).toUpperCase() + splitType[1].slice(1);
-
-        const capitalisedType =
-            capitalisedTypeFirst + " " + capitalisedTypeSecond;
-
-        return capitalisedType;
+    for (const word of words) {
+        formattedWords.push(word[0].toUpperCase() + word.substring(1));
     }
-    const newType = type.charAt(0).toUpperCase() + type.slice(1);
-    return newType;
+
+    return formattedWords.join(" ");
 }
