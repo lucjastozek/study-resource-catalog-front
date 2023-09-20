@@ -54,3 +54,14 @@ describe("User can choose a name from the selector", () => {
         cy.get('[id="user-selector"]').select(1);
     });
 });
+
+describe("User can filter for a resource", () => {
+    it("User types a search string", () => {
+        cy.visit("http://localhost:3000/home");
+        cy.wait(1000);
+
+        cy.get('[id="search-bar"]').type("Get Link Preview API");
+        cy.contains("Get Link Preview API").click();
+        cy.contains("Close").click();
+    });
+});

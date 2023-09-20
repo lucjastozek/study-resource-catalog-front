@@ -30,6 +30,7 @@ export function SearchBar({
                     <SearchIcon color="gray.300" />
                 </InputLeftElement>
                 <Input
+                    id="search-bar"
                     mt={3}
                     onChange={(e) => setSearchInput(e.target.value)}
                     width={{ base: "100%", lg: "20vw" }}
