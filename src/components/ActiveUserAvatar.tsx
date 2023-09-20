@@ -31,7 +31,12 @@ export function ActiveUserAvatar({
     return (
         <>
             <Popover>
-                <Box gridArea={"avatar"} width={"20vw"} marginLeft={"auto"}>
+                <Box
+                    gridArea={"avatar"}
+                    width={"20vw"}
+                    marginLeft={"auto"}
+                    mt={"1rem"}
+                >
                     <PopoverTrigger>
                         <Box textAlign="center" mb={"4"}>
                             <Avatar src={userImage} name={activeUser.name}>

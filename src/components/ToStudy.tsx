@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
-import { filterResourcesByKeywords } from "../utils/filterResourcesByKeywordst";
+import { filterResourcesByKeywords } from "../utils/filterResourcesByKeywords";
 import { filterResourcesByTags } from "../utils/filterResourcesByTags";
 import { sortResourcesByDate } from "../utils/sortResourcesByDate";
 import { tagScheme } from "../utils/tagScheme";
