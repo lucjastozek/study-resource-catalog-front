@@ -23,7 +23,7 @@ export function Header({
                         ? `"empty heading avatar"`
                         : `"heading heading avatar"`
                 }
-                width={"100%"}
+                width={"100vw"}
             >
                 {isLargeScreen && (
                     <Text gridArea={"empty"} width={"20vw"}></Text>

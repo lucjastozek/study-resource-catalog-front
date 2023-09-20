@@ -1,17 +1,10 @@
 export function formatPathName(path: string): string {
-    if (path.includes("-")) {
-        const splitPath = path.split("-");
+    const words = path.split("-");
+    const formattedWords: string[] = [];
 
-        const capitalisedTypeFirst =
-            splitPath[0].charAt(0).toUpperCase() + splitPath[0].slice(1);
-        const capitalisedTypeSecond =
-            splitPath[1].charAt(0).toUpperCase() + splitPath[1].slice(1);
-
-        const capitalisedType =
-            capitalisedTypeFirst + " " + capitalisedTypeSecond;
-
-        return capitalisedType;
+    for (const word of words) {
+        formattedWords.push(word[0].toUpperCase() + word.substring(1));
     }
-    const newPath = path.charAt(0).toUpperCase() + path.slice(1);
-    return newPath;
+
+    return formattedWords.join(" ");
 }
