@@ -1,12 +1,12 @@
 import { Resource } from "../interface/Resource";
 
-export const filterContent = (
+export function filterResourcesByKeywords(
     resources: Resource[],
     usernames: {
         [key: number]: string;
     },
     searchInput: string
-) => {
+) {
     const searchInputLowerCase = searchInput.toLocaleLowerCase();
     const filteredContent = resources.filter(
         (resource) =>
@@ -23,4 +23,4 @@ export const filterContent = (
     );
 
     return filteredContent;
-};
+}

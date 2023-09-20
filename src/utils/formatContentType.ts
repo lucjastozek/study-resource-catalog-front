@@ -1,4 +1,4 @@
-export const formatContentType = (type: string): string => {
+export function formatContentType(type: string): string {
     if (type.includes("_")) {
         const splitType = type.split("_");
 
@@ -14,4 +14,4 @@ export const formatContentType = (type: string): string => {
     }
     const newType = type.charAt(0).toUpperCase() + type.slice(1);
     return newType;
-};
+}

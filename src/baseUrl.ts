@@ -1,1 +1,1 @@
-export const baseUrl = "https://c7c2-study-app.onrender.com";
+export const baseUrl = import.meta.env.VITE_BACKEND_URL;

@@ -1,23 +1,7 @@
-import {
-    Button,
-    Checkbox,
-    Flex,
-    Heading,
-    Input,
-    Select,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import axios from "axios";
-import { baseUrl } from "../baseUrl";
+import { Tab, TabList, TabPanels, Tabs } from "@chakra-ui/react";
 import { User } from "../interface/User";
-import { z } from "zod";
-import useCustomToast from "./useCustomToast";
-import { userSchema } from "../schemas/userSchema";
+import { SignIn } from "./SignIn";
+import { SignUp } from "./SignUp";
 
 interface UserLoginProps {
     setActiveUser: React.Dispatch<React.SetStateAction<User>>;
@@ -28,39 +12,6 @@ export function UserLogin({
     setActiveUser,
     listedUsers,
 }: UserLoginProps): JSX.Element {
-    const [nameInput, setNameInput] = useState<string>("");
-    const [isFaculty, setIsFaculty] = useState<boolean>(false);
-
-    const showUserToast = useCustomToast();
-
-    const handleNameInput = (nameValue: string) => {
-        setNameInput(nameValue);
-    };
-
-    const handleSubmitName = async () => {
-        const userToAdd = {
-            user_name: nameInput,
-            is_faculty: isFaculty,
-        };
-        try {
-            userSchema.parse(userToAdd);
-            const response = await axios.post(`${baseUrl}/users`, userToAdd);
-
-            setActiveUser(response.data[0]);
-            setNameInput("");
-            setIsFaculty(false);
-            showUserToast("success", "The user has been successfully created!");
-        } catch (error) {
-            if (error instanceof z.ZodError) {
-                error.errors.forEach((err) => {
-                    showUserToast("error", err.message);
-                });
-            } else {
-                showUserToast("error", "Username has already been taken!");
-            }
-        }
-    };
-
     return (
         <>
             <Tabs mt={"1rem"} variant="solid-rounded" colorScheme="teal">
@@ -69,57 +20,11 @@ export function UserLogin({
                     <Tab>Sign Up</Tab>
                 </TabList>
                 <TabPanels>
-                    <TabPanel w={{ base: "100%", lg: "50vw" }}>
-                        <Heading>Sign in!</Heading>
-                        <div style={{ marginBottom: "300px" }}>
-                            <Select
-                                placeholder="Select a user"
-                                onChange={(e) =>
-                                    setActiveUser(
-                                        listedUsers[Number(e.target.value)]
-                                    )
-                                }
-                                id="user-selector"
-                            >
-                                {listedUsers.map((user, index) => (
-                                    <option key={user.user_id} value={index}>
-                                        {user.name}
-                                    </option>
-                                ))}
-                            </Select>
-                        </div>
-                    </TabPanel>
-                    <TabPanel w={{ base: "100%", lg: "50vw" }}>
-                        <div style={{ marginBottom: "218px" }}>
-                            <Flex direction={"column"}>
-                                <Heading>Create a new user!</Heading>
-
-                                <Input
-                                    value={nameInput}
-                                    onChange={(e) =>
-                                        handleNameInput(e.target.value)
-                                    }
-                                    id="sign-up-input"
-                                />
-                                <Checkbox
-                                    size={"lg"}
-                                    isChecked={isFaculty}
-                                    onChange={(e) =>
-                                        setIsFaculty(e.target.checked)
-                                    }
-                                >
-                                    Faculty Member
-                                </Checkbox>
-
-                                <Button
-                                    onClick={handleSubmitName}
-                                    marginTop={"2vh"}
-                                >
-                                    Sign up
-                                </Button>
-                            </Flex>
-                        </div>
-                    </TabPanel>
+                    <SignIn
+                        setActiveUser={setActiveUser}
+                        listedUsers={listedUsers}
+                    />
+                    <SignUp setActiveUser={setActiveUser} />
                 </TabPanels>
             </Tabs>
         </>

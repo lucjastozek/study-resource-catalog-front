@@ -3,7 +3,7 @@ import { useToast, ToastPosition } from "@chakra-ui/react";
 function useCustomToast() {
     const toast = useToast();
 
-    const showToast = (
+    function showToast(
         status:
             | "info"
             | "warning"
@@ -13,7 +13,7 @@ function useCustomToast() {
             | undefined,
         description: string,
         pos = "top"
-    ) => {
+    ) {
         const toastOptions = {
             position: pos as ToastPosition,
             title: `${status
@@ -27,7 +27,7 @@ function useCustomToast() {
         };
 
         toast(toastOptions);
-    };
+    }
 
     return showToast;
 }
