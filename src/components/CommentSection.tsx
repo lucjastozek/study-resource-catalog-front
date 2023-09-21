@@ -130,7 +130,7 @@ export function CommentSection({
 
                         <Text
                             fontSize={"sm"}
-                        >{`Commenting as ${activeUser.name}`}</Text>
+                        >{`Commenting as ${activeUser.name}:`}</Text>
                         <Input
                             placeholder="Enter a commment..."
                             onChange={(e) => setCommentInput(e.target.value)}
