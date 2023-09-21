@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, StarIcon } from "@chakra-ui/icons";
 import {
     Box,
     Button,
@@ -208,6 +208,13 @@ export function ResourceDetail({
                                     );
                                 }}
                             >
+                                <StarIcon
+                                    style={{
+                                        marginRight: "5px",
+                                        verticalAlign: "middle",
+                                        marginTop: "-5px",
+                                    }}
+                                />{" "}
                                 Add To Favourites!
                             </Button>
                             <Button
