@@ -82,7 +82,7 @@ export function CommentSection({
                                     display="flex"
                                     alignItems="center"
                                     pb={0}
-                                    pt={0}
+                                    pt={1.5}
                                     pr={0.5}
                                 >
                                     <Avatar
@@ -108,7 +108,13 @@ export function CommentSection({
                                         />
                                     )}
                                 </CardHeader>
-                                <Text mt={1}>{comment.text} </Text>
+                                <Text
+                                    textAlign={"left"}
+                                    paddingInline={"1vw"}
+                                    mt={2}
+                                >
+                                    {comment.text}{" "}
+                                </Text>
                                 <Text
                                     fontSize={"xs"}
                                     as={"i"}
