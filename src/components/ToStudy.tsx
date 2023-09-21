@@ -1,5 +1,6 @@
 import { Grid, Heading } from "@chakra-ui/react";
 import { useState } from "react";
+import { Comment } from "../interface/Comment";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
@@ -14,30 +15,34 @@ import { TagsCloud } from "./TagsCloud";
 
 interface ToStudyProps {
     favourites: Resource[];
-    setSelectedResource: React.Dispatch<
-        React.SetStateAction<Resource | undefined>
-    >;
     usernames: {
         [key: number]: string;
     };
     linkPreviews: { [key: number]: string };
-    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     selectedResource: Resource | undefined;
     activeUser: User;
-    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
     resourceTags: TagI[];
+    comments: Comment[];
+    setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+    setSelectedResource: React.Dispatch<
+        React.SetStateAction<Resource | undefined>
+    >;
+    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
 
 export function ToStudy({
     favourites,
-    setSelectedResource,
     usernames,
     linkPreviews,
-    setResources,
     selectedResource,
     activeUser,
-    setFavourites,
     resourceTags,
+    comments,
+    setComments,
+    setResources,
+    setFavourites,
+    setSelectedResource,
 }: ToStudyProps): JSX.Element {
     const [searchInput, setSearchInput] = useState<string>("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -84,6 +89,8 @@ export function ToStudy({
                     setResources={setResources}
                     activeUser={activeUser}
                     setFavourites={setFavourites}
+                    comments={comments}
+                    setComments={setComments}
                     tags={resourceTags.filter(
                         (tag) =>
                             tag.resource_id === selectedResource.resource_id

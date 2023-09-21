@@ -1,6 +1,7 @@
 import { Alert, AlertIcon, Container } from "@chakra-ui/react";
 import { useState } from "react";
 import { Route, Switch } from "react-router-dom";
+import { Comment } from "../interface/Comment";
 import { LinkPreviews } from "../interface/LinkPreviews";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
@@ -15,14 +16,16 @@ import { UserLogin } from "./UserLogin";
 interface RoutesProps {
     listedUsers: User[];
     favourites: Resource[];
-    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
     usernames: Usernames;
     linkPreviews: LinkPreviews;
     resourceTags: TagI[];
     resources: Resource[];
-    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     activeUser: User;
+    comments: Comment[];
     setActiveUser: React.Dispatch<React.SetStateAction<User>>;
+    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
+    setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 }
 
 export function Routes({
@@ -32,8 +35,10 @@ export function Routes({
     linkPreviews,
     resourceTags,
     resources,
-    setResources,
     activeUser,
+    comments,
+    setComments,
+    setResources,
     setFavourites,
     setActiveUser,
 }: RoutesProps): JSX.Element {
@@ -44,27 +49,31 @@ export function Routes({
             <Route exact path="/">
                 <Home
                     resources={resources}
-                    setResources={setResources}
                     selectedResource={selectedResource}
-                    setSelectedResource={setSelectedResource}
                     usernames={usernames}
                     linkPreviews={linkPreviews}
                     activeUser={activeUser}
-                    setFavourites={setFavourites}
+                    comments={comments}
                     resourceTags={resourceTags}
+                    setResources={setResources}
+                    setSelectedResource={setSelectedResource}
+                    setComments={setComments}
+                    setFavourites={setFavourites}
                 />
             </Route>
             <Route path="/home">
                 <Home
                     resources={resources}
-                    setResources={setResources}
                     selectedResource={selectedResource}
-                    setSelectedResource={setSelectedResource}
                     usernames={usernames}
                     linkPreviews={linkPreviews}
                     activeUser={activeUser}
-                    setFavourites={setFavourites}
                     resourceTags={resourceTags}
+                    comments={comments}
+                    setComments={setComments}
+                    setFavourites={setFavourites}
+                    setResources={setResources}
+                    setSelectedResource={setSelectedResource}
                 />
             </Route>
             <Route path="/users">
@@ -76,14 +85,16 @@ export function Routes({
             <Route path="/study">
                 <ToStudy
                     favourites={favourites}
-                    setSelectedResource={setSelectedResource}
                     usernames={usernames}
                     linkPreviews={linkPreviews}
-                    setResources={setResources}
                     selectedResource={selectedResource}
                     activeUser={activeUser}
-                    setFavourites={setFavourites}
                     resourceTags={resourceTags}
+                    comments={comments}
+                    setComments={setComments}
+                    setResources={setResources}
+                    setFavourites={setFavourites}
+                    setSelectedResource={setSelectedResource}
                 />
             </Route>
             <Route path="/submit-new">

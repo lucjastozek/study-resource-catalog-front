@@ -21,6 +21,8 @@ import { Header } from "./Header";
 import { Navigation } from "./Navigation";
 import { Routes } from "./Routes";
 import useCustomToast from "./useCustomToast";
+import { fetchComments } from "../utils/fetchComments";
+import { Comment } from "../interface/Comment";
 
 function App() {
     const [listedUsers, setListedUsers] = useState<User[]>([]);
@@ -29,6 +31,7 @@ function App() {
     );
     const [resources, setResources] = useState<Resource[]>([]);
     const [favourites, setFavourites] = useState<Resource[]>([]);
+    const [comments, setComments] = useState<Comment[]>([]);
     const [usernames, setUsernames] = useState<Usernames>({});
     const [linkPreviews, setLinkPreviews] = useState<LinkPreviews>({});
     const [resourceTags, setResourceTags] = useState<TagI[]>([]);
@@ -40,18 +43,20 @@ function App() {
         fetchUsers().then((users) => setListedUsers(users));
         fetchResources().then((res) => setResources(res));
         fetchTags().then((t) => setResourceTags(t));
+        fetchComments().then((c) => setComments(c));
     }, []);
 
     useEffect(() => {
         const socket = io(baseUrl);
-
         socket.connect();
 
         socket.on("resource", (received) => {
             fetchResources().then((res) => setResources(res));
             showToast(
                 "info",
-                `CHECK OUT THIS SICK NEW RESOURCE: ${received.name}`,
+                `User ${
+                    usernames[received.user_id]
+                } just submitted the following resource: ${received.name}`,
                 "top-left"
             );
         });
@@ -60,7 +65,24 @@ function App() {
             fetchUsers().then((users) => setListedUsers(users));
             showToast(
                 "success",
-                `Welcome our new user - ${received.name}!!!`,
+                `Welcome our new user - ${received.name}!`,
+                "top-left"
+            );
+        });
+
+        socket.on("comment", (received: Comment) => {
+            fetchComments().then((c) => setComments(c));
+
+            const user = usernames[received.user_id];
+            showToast(
+                "info",
+                `
+                ${user} just commented on '${
+                    resources.find(
+                        (r) => r.resource_id === received.resource_id
+                    )?.name
+                }':                                                                                                   
+              "${received.text}"`,
                 "top-left"
             );
         });
@@ -70,7 +92,7 @@ function App() {
         }
 
         return cleanup;
-    }, [showToast]);
+    }, [showToast, resources, usernames]);
 
     useEffect(() => {
         for (const r of resources) {
@@ -135,10 +157,12 @@ function App() {
                         linkPreviews={linkPreviews}
                         resourceTags={resourceTags}
                         resources={resources}
-                        setResources={setResources}
                         activeUser={activeUser}
+                        comments={comments}
                         setFavourites={setFavourites}
+                        setResources={setResources}
                         setActiveUser={setActiveUser}
+                        setComments={setComments}
                     />
                 </Router>
                 <Footer />

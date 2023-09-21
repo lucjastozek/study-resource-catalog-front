@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import { useState } from "react";
+import { Comment } from "../interface/Comment";
 import { LinkPreviews } from "../interface/LinkPreviews";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
@@ -17,28 +18,32 @@ import { TopFiveResources } from "./TopFiveResources";
 
 interface HomeProps {
     resources: Resource[];
-    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
     selectedResource: Resource | undefined;
-    setSelectedResource: React.Dispatch<
-        React.SetStateAction<Resource | undefined>
-    >;
     usernames: Usernames;
     linkPreviews: LinkPreviews;
     activeUser: User;
-    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
     resourceTags: TagI[];
+    comments: Comment[];
+    setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+    setSelectedResource: React.Dispatch<
+        React.SetStateAction<Resource | undefined>
+    >;
+    setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
+    setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
 }
 
 export function Home({
     resources,
-    setResources,
     selectedResource,
-    setSelectedResource,
     usernames,
     linkPreviews,
     activeUser,
-    setFavourites,
     resourceTags,
+    comments,
+    setComments,
+    setSelectedResource,
+    setFavourites,
+    setResources,
 }: HomeProps): JSX.Element {
     const [searchInput, setSearchInput] = useState<string>("");
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -92,6 +97,8 @@ export function Home({
                     setResources={setResources}
                     activeUser={activeUser}
                     setFavourites={setFavourites}
+                    comments={comments}
+                    setComments={setComments}
                     tags={resourceTags.filter(
                         (tag) =>
                             tag.resource_id === selectedResource.resource_id

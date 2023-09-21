@@ -1,5 +1,6 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
+    Box,
     Button,
     Link,
     Modal,
@@ -9,19 +10,22 @@ import {
     ModalFooter,
     ModalOverlay,
     Text,
+    VStack,
     useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
 import { baseUrl } from "../baseUrl";
+import { Comment } from "../interface/Comment";
 import { Resource } from "../interface/Resource";
 import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
 import { handleDeleteResource } from "../utils/deleteHandlers";
 import { fetchFavourites } from "../utils/fetchFavourites";
 import { formatContentType } from "../utils/formatContentType";
-import useCustomToast from "./useCustomToast";
+import { CommentSection } from "./CommentSection";
 import { ResourceModalHeader } from "./ResourceModalHeader";
+import useCustomToast from "./useCustomToast";
 
 interface ResourceDetailProps {
     isOpen: boolean;
@@ -29,13 +33,15 @@ interface ResourceDetailProps {
     tagColor: string;
     imageLink: string | null;
     username: string;
+    activeUser: User;
+    tags: TagI[];
+    comments: Comment[];
+    setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
     setSelectedResource: React.Dispatch<
         React.SetStateAction<Resource | undefined>
     >;
     setResources: React.Dispatch<React.SetStateAction<Resource[]>>;
-    activeUser: User;
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>;
-    tags: TagI[];
 }
 
 export function ResourceDetail({
@@ -44,11 +50,13 @@ export function ResourceDetail({
     tagColor,
     imageLink,
     username,
+    tags,
+    activeUser,
+    comments,
+    setComments,
     setSelectedResource,
     setResources,
-    activeUser,
     setFavourites,
-    tags,
 }: ResourceDetailProps): JSX.Element {
     const { onClose } = useDisclosure();
     const toast = useCustomToast();
@@ -58,9 +66,7 @@ export function ResourceDetail({
             resource_id: resource_id,
             user_id: user_id,
         });
-
         toast("success", "Added to favourites!");
-
         fetchFavourites(activeUser.user_id).then((fav) => setFavourites(fav));
     }
 
@@ -83,24 +89,21 @@ export function ResourceDetail({
                     imageLink={imageLink}
                 />
                 <ModalBody>
-                    <Text mb={2}>
-                        <Text>
-                            <span style={{ fontWeight: "bold" }}>Author:</span>{" "}
-                            {resource.author}
-                        </Text>
+                    <Text mb={2} whiteSpace="pre-line">
+                        <span style={{ fontWeight: "bold" }}>{`Author:
+                        `}</span>{" "}
+                        {resource.author}
                     </Text>
 
-                    <Text mb={2}>
-                        <Text mb={1} fontWeight={"bold"}>
-                            Description:{" "}
-                        </Text>
+                    <Text mb={2} whiteSpace="pre-line">
+                        <span style={{ fontWeight: "bold" }}>{`Description:
+                        `}</span>{" "}
                         {resource.description}
                     </Text>
 
-                    <Text mb={2}>
-                        <Text mb={1} fontWeight={"bold"}>
-                            Reason:{" "}
-                        </Text>
+                    <Text mb={2} whiteSpace="pre-line">
+                        <span style={{ fontWeight: "bold" }}>{`Reason:
+                        `}</span>{" "}
                         {resource.reason}
                     </Text>
                     <Text mb={2}>
@@ -130,46 +133,55 @@ export function ResourceDetail({
                     </Text>
                 </ModalBody>
 
-                <ModalFooter>
-                    <Button
-                        colorScheme="blue"
-                        mr={3}
-                        onClick={() => {
-                            onClose();
-                            setSelectedResource(undefined);
-                        }}
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        onClick={() => {
-                            handleAddFavourite(
-                                resource.resource_id,
-                                activeUser.user_id
-                            );
-                        }}
-                    >
-                        Add To Favourites!
-                    </Button>
-                    {activeUser.user_id === resource.user_id && (
-                        <Button
-                            colorScheme="red"
-                            onClick={(e) => {
-                                onClose();
-                                handleDeleteResource(
-                                    resource.resource_id,
-                                    setResources
-                                );
-                                e.stopPropagation();
-                                setSelectedResource(undefined);
-                            }}
-                            size={"sm"}
-                            marginLeft={"auto"}
-                        >
-                            Delete
-                        </Button>
-                    )}
+                <ModalFooter justifyContent={"center"}>
+                    <VStack>
+                        <Box>
+                            <Button
+                                mr={3}
+                                onClick={() => {
+                                    handleAddFavourite(
+                                        resource.resource_id,
+                                        activeUser.user_id
+                                    );
+                                }}
+                            >
+                                Add To Favourites!
+                            </Button>
+                            <Button
+                                colorScheme="blue"
+                                mr={3}
+                                onClick={() => {
+                                    onClose();
+                                    setSelectedResource(undefined);
+                                }}
+                            >
+                                Close
+                            </Button>
+                            {activeUser.user_id === resource.user_id && (
+                                <Button
+                                    colorScheme="red"
+                                    onClick={(e) => {
+                                        onClose();
+                                        handleDeleteResource(
+                                            resource.resource_id,
+                                            setResources
+                                        );
+                                        e.stopPropagation();
+                                        setSelectedResource(undefined);
+                                    }}
+                                    marginLeft={"auto"}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                        </Box>
+                        <CommentSection
+                            resource={resource}
+                            comments={comments}
+                            activeUser={activeUser}
+                            setComments={setComments}
+                        />
+                    </VStack>
                 </ModalFooter>
             </ModalContent>
         </Modal>
