@@ -39,7 +39,11 @@ export function ActiveUserAvatar({
                 >
                     <PopoverTrigger>
                         <Box textAlign="center" mb={"4"}>
-                            <Avatar src={userImage} name={activeUser.name}>
+                            <Avatar
+                                name={activeUser.name}
+                                src={userImage}
+                                key={activeUser.user_id}
+                            >
                                 {activeUser.user_id > 0 && (
                                     <AvatarBadge
                                         boxSize="1.25em"

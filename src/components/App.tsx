@@ -35,7 +35,7 @@ function App() {
     const [usernames, setUsernames] = useState<Usernames>({});
     const [linkPreviews, setLinkPreviews] = useState<LinkPreviews>({});
     const [resourceTags, setResourceTags] = useState<TagI[]>([]);
-    const [userImage, setUserImage] = useState("https://bit.ly/broken-link");
+    const [userImage, setUserImage] = useState<string>("");
 
     const showToast = useCustomToast();
 
@@ -73,7 +73,9 @@ function App() {
         socket.on("comment", (received: Comment) => {
             fetchComments().then((c) => setComments(c));
 
-            const user = usernames[received.user_id];
+            const user = listedUsers.find(
+                (u) => u.user_id === received.user_id
+            )?.name;
             showToast(
                 "info",
                 `
@@ -92,7 +94,7 @@ function App() {
         }
 
         return cleanup;
-    }, [showToast, resources, usernames]);
+    }, [showToast, resources, usernames, listedUsers]);
 
     useEffect(() => {
         for (const r of resources) {
@@ -133,7 +135,7 @@ function App() {
                 setFavourites(fav)
             );
         }
-
+        // only users with id < 52 have custom images
         activeUser.user_id < 52
             ? setUserImage(`./${activeUser.name}-avatar.png`)
             : setUserImage("");
