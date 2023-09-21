@@ -2,6 +2,9 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
     Box,
     Button,
+    Editable,
+    EditableInput,
+    EditablePreview,
     Link,
     Modal,
     ModalBody,
@@ -13,8 +16,9 @@ import {
     VStack,
     useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import moment from "moment";
+import { useState } from "react";
 import { baseUrl } from "../baseUrl";
 import { Comment } from "../interface/Comment";
 import { Resource } from "../interface/Resource";
@@ -22,6 +26,7 @@ import { TagI } from "../interface/Tag";
 import { User } from "../interface/User";
 import { handleDeleteResource } from "../utils/deleteHandlers";
 import { fetchFavourites } from "../utils/fetchFavourites";
+import { fetchResources } from "../utils/fetchResources";
 import { formatContentType } from "../utils/formatContentType";
 import { CommentSection } from "./CommentSection";
 import { ResourceModalHeader } from "./ResourceModalHeader";
@@ -60,6 +65,8 @@ export function ResourceDetail({
 }: ResourceDetailProps): JSX.Element {
     const { onClose } = useDisclosure();
     const toast = useCustomToast();
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [editValues, setEditValues] = useState<Resource>({ ...resource });
 
     async function handleAddFavourite(resource_id: number, user_id: number) {
         await axios.post(baseUrl + "/favourites", {
@@ -68,6 +75,37 @@ export function ResourceDetail({
         });
         toast("success", "Added to favourites!");
         fetchFavourites(activeUser.user_id).then((fav) => setFavourites(fav));
+    }
+
+    function handleChangeForm(propertyTarget: string, value: string | number) {
+        const updatedProperty = { [propertyTarget]: value };
+        setEditValues((prev) => ({ ...prev, ...updatedProperty }));
+    }
+
+    function handleDiscardEditing() {
+        setEditValues({ ...resource });
+        setEditMode(false);
+    }
+
+    async function handleSubmit() {
+        if (activeUser) {
+            try {
+                await axios.put(
+                    baseUrl + "/resources/" + editValues.resource_id,
+                    editValues
+                );
+
+                fetchResources().then((res) => setResources(res));
+                toast("success", "Resource added!");
+            } catch (error) {
+                if (
+                    error instanceof AxiosError &&
+                    error.response !== undefined
+                ) {
+                    toast("error", error.response.data.error);
+                }
+            }
+        }
     }
 
     return (
@@ -87,25 +125,55 @@ export function ResourceDetail({
                     resource={resource}
                     tags={tags}
                     imageLink={imageLink}
+                    activeUser={activeUser}
+                    setEditMode={setEditMode}
+                    editMode={editMode}
+                    handleChangeForm={handleChangeForm}
+                    handleSubmit={handleSubmit}
+                    handleDiscardEditing={handleDiscardEditing}
+                    editValues={editValues}
                 />
                 <ModalBody>
-                    <Text mb={2} whiteSpace="pre-line">
-                        <span style={{ fontWeight: "bold" }}>{`Author:
-                        `}</span>{" "}
-                        {resource.author}
-                    </Text>
+                    <Text as={"b"}>Author:</Text>
 
-                    <Text mb={2} whiteSpace="pre-line">
-                        <span style={{ fontWeight: "bold" }}>{`Description:
-                        `}</span>{" "}
-                        {resource.description}
-                    </Text>
+                    <Editable
+                        value={editValues.author}
+                        onChange={(e) => handleChangeForm("author", e)}
+                        isDisabled={!editMode}
+                        outline={editMode ? "solid 1px #4299E1" : "none"}
+                        borderRadius={editMode ? "5px" : "none"}
+                        paddingInline={2}
+                    >
+                        <EditablePreview />
+                        <EditableInput />
+                    </Editable>
 
-                    <Text mb={2} whiteSpace="pre-line">
-                        <span style={{ fontWeight: "bold" }}>{`Reason:
-                        `}</span>{" "}
-                        {resource.reason}
-                    </Text>
+                    <Text as={"b"}>Description:</Text>
+
+                    <Editable
+                        value={editValues.description}
+                        onChange={(e) => handleChangeForm("description", e)}
+                        isDisabled={!editMode}
+                        outline={editMode ? "solid 1px #4299E1" : "none"}
+                        borderRadius={editMode ? "5px" : "none"}
+                        paddingInline={1}
+                    >
+                        <EditablePreview />
+                        <EditableInput />
+                    </Editable>
+                    <Text as={"b"}>Reason:</Text>
+                    <Editable
+                        value={editValues.reason}
+                        onChange={(e) => handleChangeForm("reason", e)}
+                        isDisabled={!editMode}
+                        outline={editMode ? "solid 1px #4299E1" : "none"}
+                        borderRadius={editMode ? "5px" : "none"}
+                        paddingInline={2}
+                    >
+                        <EditablePreview />
+                        <EditableInput />
+                    </Editable>
+
                     <Text mb={2}>
                         <span style={{ fontWeight: "bold" }}>
                             Content type:
