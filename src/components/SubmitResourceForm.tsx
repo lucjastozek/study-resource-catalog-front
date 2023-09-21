@@ -83,18 +83,15 @@ export default function SubmitResourceForm({
                 _placeholder={{ color: placeholderColor }}
             ></Input>
 
-            <InputGroup>
-                <InputLeftAddon textAlign={"center"}>https:// </InputLeftAddon>
-                <Input
-                    onChange={(e) =>
-                        handleChangeForm(e.target.formTarget, e.target.value)
-                    }
-                    formTarget="url"
-                    value={formValues.url}
-                    placeholder="URL"
-                    _placeholder={{ color: placeholderColor }}
-                ></Input>
-            </InputGroup>
+            <Input
+                onChange={(e) =>
+                    handleChangeForm(e.target.formTarget, e.target.value)
+                }
+                formTarget="url"
+                value={formValues.url}
+                placeholder="URL"
+                _placeholder={{ color: placeholderColor }}
+            ></Input>
             <Textarea
                 onChange={(e) =>
                     handleChangeForm("description", e.target.value)
