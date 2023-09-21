@@ -10,7 +10,7 @@ export async function handleLike(
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>,
     user_id: number
 ) {
-    await axios.put(`${baseUrl}/resources/${id}`, { action: "like" });
+    await axios.put(`${baseUrl}/resources/likes/${id}`, { action: "like" });
     fetchResources().then((res) => setResources(res));
     fetchFavourites(user_id).then((fav) => setFavourites(fav));
 }
@@ -21,7 +21,7 @@ export async function handleDislike(
     setFavourites: React.Dispatch<React.SetStateAction<Resource[]>>,
     user_id: number
 ) {
-    await axios.put(`${baseUrl}/resources/${id}`, { action: "dislike" });
+    await axios.put(`${baseUrl}/resources/likes/${id}`, { action: "dislike" });
     fetchResources().then((res) => setResources(res));
     fetchFavourites(user_id).then((fav) => setFavourites(fav));
 }
