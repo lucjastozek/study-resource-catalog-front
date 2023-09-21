@@ -88,22 +88,17 @@ export function ResourceDetail({
     }
 
     async function handleSubmit() {
-        if (activeUser) {
-            try {
-                await axios.put(
-                    baseUrl + "/resources/" + editValues.resource_id,
-                    editValues
-                );
+        try {
+            await axios.put(
+                baseUrl + "/resources/" + editValues.resource_id,
+                editValues
+            );
 
-                fetchResources().then((res) => setResources(res));
-                toast("success", "Resource added!");
-            } catch (error) {
-                if (
-                    error instanceof AxiosError &&
-                    error.response !== undefined
-                ) {
-                    toast("error", error.response.data.error);
-                }
+            fetchResources().then((res) => setResources(res));
+            toast("success", `Resource ${resource.name} updated!`);
+        } catch (error) {
+            if (error instanceof AxiosError && error.response !== undefined) {
+                toast("error", error.response.data.error);
             }
         }
     }

@@ -69,7 +69,7 @@ export function ResourceModalHeader({
                                 setEditMode((prev) => !prev);
                             }}
                             ml={"auto"}
-                            mr={editMode ? "0.1vw" : "2vw"}
+                            mr={editMode ? "0.1vw" : { base: "5vw", lg: "2vw" }}
                             aria-label="Edit Button"
                             icon={editMode ? <CheckIcon /> : <EditIcon />}
                             colorScheme={editMode ? "green" : "blue"}
@@ -79,7 +79,7 @@ export function ResourceModalHeader({
                             <IconButton
                                 onClick={handleDiscardEditing}
                                 aria-label="discard edits"
-                                mr={"2vw"}
+                                mr={{ base: "5vw", lg: "2vw" }}
                                 colorScheme="red"
                                 icon={<CloseIcon />}
                             ></IconButton>
